@@ -41,8 +41,8 @@ O projeto foi desenvolvido seguindo os conceitos de:
 
 
 ```text
-📂 SaveState/
-├── 📂 src/main/java/br/upf/savestate/
+📂 GameLog/
+├── 📂 src/main/java/br/upf/gamelog/
 │   ├── 📂 controller/        # Controllers da aplicação
 │   ├── 📂 entity/            # Entidades JPA
 │   ├── 📂 facade/            # Regras de negócio
@@ -109,7 +109,7 @@ Principais entidades do sistema:
 ### Clonar o Repositório
 
 ```bash
-git clone https://github.com/seu-usuario/savestate.git
+git clone https://github.com/manudsf/ADS_Manuela_GameLog
 ```
 
 ---
@@ -148,7 +148,7 @@ Compatível com:
 Inicie o servidor e abra o navegador:
 
 ```text
-http://localhost:8080/savestate
+http://localhost:8080/gamelog
 ```
 
 ---
