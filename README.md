@@ -36,9 +36,9 @@ O projeto foi desenvolvido seguindo os conceitos de:
 
 ---
 
-##Estrutura do Projeto
+## Estrutura do Projeto
 
----
+
 
 ```text
 📂 SaveState/
