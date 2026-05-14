@@ -1,5 +1,5 @@
 # GameLog - Game Inventory Manager
-> Projeto académico desenvolvido com Java, JSF/PrimeFaces e arquitetura em camadas para gestão de coleções de videojogos.
+> Projeto académico desenvolvido com Java, JSF/PrimeFaces e arquitetura em camadas para gestão de coleções de jogos.
 
 ##  Sobre o Projeto
 
