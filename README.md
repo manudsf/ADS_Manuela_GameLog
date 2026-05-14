@@ -71,7 +71,7 @@ O projeto foi desenvolvido seguindo os conceitos de:
 ### Gestão de Jogos
 * Cadastro de jogos
 * Plataforma
-* Género
+* Genero
 * Formato físico/digital
 * Avaliação pessoal
 
