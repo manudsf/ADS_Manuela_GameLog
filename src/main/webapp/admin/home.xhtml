@@ -1,0 +1,473 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title"><h:outputText value="GameLog - Home"/></ui:define>
+
+    <ui:define name="head">
+        <style>
+            /* ================================================
+               HOME - Landing Page
+               ================================================ */
+
+            .gl-home {
+                min-height: 100vh;
+                padding: 0 0 60px 0;
+            }
+
+            /* --- Hero --- */
+            .gl-hero {
+                text-align: center;
+                padding: 64px 24px 48px;
+                position: relative;
+            }
+
+            .gl-hero::before {
+                content: '';
+                position: absolute;
+                top: 0; left: 50%;
+                transform: translateX(-50%);
+                width: 600px;
+                height: 300px;
+                background: radial-gradient(ellipse at center, rgba(124,58,237,0.18) 0%, transparent 70%);
+                pointer-events: none;
+            }
+
+            .gl-hero-title {
+                font-size: 3rem;
+                font-weight: 800;
+                background: linear-gradient(135deg, #a78bfa, #60a5fa);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                margin: 0 0 8px 0;
+                line-height: 1.1;
+            }
+
+            .gl-hero-sub {
+                font-size: 0.95rem;
+                color: rgba(148,163,184,0.7);
+                letter-spacing: 3px;
+                text-transform: uppercase;
+                margin-bottom: 20px;
+            }
+
+            .gl-hero-desc {
+                max-width: 540px;
+                margin: 0 auto 40px;
+                color: rgba(226,232,240,0.75);
+                font-size: 1.05rem;
+                line-height: 1.7;
+            }
+
+            /* --- Botoes de acao --- */
+            .gl-actions {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-bottom: 72px;
+            }
+
+            .gl-btn {
+                display: inline-flex;
+                align-items: center;
+                gap: 10px;
+                padding: 14px 28px;
+                border-radius: 12px;
+                font-size: 1rem;
+                font-weight: 600;
+                text-decoration: none;
+                transition: all 0.25s ease;
+                cursor: pointer;
+                border: none;
+            }
+
+            .gl-btn-primary {
+                background: linear-gradient(135deg, #7c3aed, #2563eb);
+                color: #fff;
+                box-shadow: 0 4px 20px rgba(124,58,237,0.35);
+            }
+
+            .gl-btn-primary:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 28px rgba(124,58,237,0.5);
+                color: #fff;
+                text-decoration: none;
+            }
+
+            .gl-btn-secondary {
+                background: rgba(255,255,255,0.06);
+                color: rgba(226,232,240,0.85);
+                border: 1px solid rgba(139,92,246,0.2);
+            }
+
+            .gl-btn-secondary:hover {
+                background: rgba(124,58,237,0.15);
+                border-color: rgba(124,58,237,0.4);
+                color: #a78bfa;
+                transform: translateY(-2px);
+                text-decoration: none;
+            }
+
+            .gl-btn i {
+                font-size: 1.1rem;
+            }
+
+            /* --- Secao do carrossel --- */
+            .gl-carousel-section {
+                padding: 0 32px;
+            }
+
+            .gl-section-title {
+                font-size: 1.25rem;
+                font-weight: 700;
+                color: #e2e8f0;
+                margin-bottom: 24px;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .gl-section-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(139,92,246,0.2);
+            }
+
+            .gl-section-title i {
+                color: #7c3aed;
+            }
+
+            /* --- Card do jogo no carrossel --- */
+            .gl-game-card {
+                background: #16162a;
+                border: 1px solid rgba(139,92,246,0.15);
+                border-radius: 14px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                height: 320px;
+                display: flex;
+                flex-direction: column;
+                margin: 4px;
+            }
+
+            .gl-game-card:hover {
+                transform: translateY(-4px);
+                border-color: rgba(124,58,237,0.4);
+                box-shadow: 0 12px 36px rgba(0,0,0,0.5);
+            }
+
+            .gl-game-cover {
+                width: 100%;
+                height: 200px;
+                object-fit: cover;
+                display: block;
+                background: #1e1e35;
+            }
+
+            .gl-game-cover-placeholder {
+                width: 100%;
+                height: 200px;
+                background: linear-gradient(135deg, #1a0a2e, #0f172a);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .gl-game-cover-placeholder i {
+                font-size: 2.5rem;
+                color: rgba(124,58,237,0.4);
+            }
+
+            .gl-game-cover-placeholder span {
+                font-size: 0.75rem;
+                color: rgba(148,163,184,0.4);
+            }
+
+            .gl-game-info {
+                padding: 14px 16px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .gl-game-title {
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: #e2e8f0;
+                margin: 0 0 8px 0;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            .gl-game-status {
+                display: inline-block;
+                padding: 3px 10px;
+                border-radius: 20px;
+                font-size: 0.75rem;
+                font-weight: 600;
+                letter-spacing: 0.3px;
+            }
+
+            .gl-status-por-jogar  { background: rgba(148,163,184,0.12); color: #94a3b8; }
+            .gl-status-a-jogar    { background: rgba(37,99,235,0.15);   color: #60a5fa; }
+            .gl-status-concluido  { background: rgba(16,185,129,0.15);  color: #10b981; }
+            .gl-status-platinado  { background: rgba(124,58,237,0.2);   color: #a78bfa; }
+
+            /* Avaliacao no card */
+            .gl-game-rating {
+                display: flex;
+                align-items: center;
+                gap: 4px;
+                font-size: 0.8rem;
+                color: rgba(148,163,184,0.6);
+                margin-top: 6px;
+            }
+
+            .gl-game-rating i {
+                color: #f59e0b;
+                font-size: 0.75rem;
+            }
+
+            .gl-game-rating strong {
+                color: #fbbf24;
+            }
+
+            /* Carrossel sem dados */
+            .gl-empty-carousel {
+                text-align: center;
+                padding: 60px 24px;
+                color: rgba(148,163,184,0.5);
+                background: #16162a;
+                border: 1px dashed rgba(139,92,246,0.2);
+                border-radius: 14px;
+            }
+
+            .gl-empty-carousel i {
+                font-size: 3rem;
+                color: rgba(124,58,237,0.3);
+                display: block;
+                margin-bottom: 12px;
+            }
+
+            /* Override PrimeFaces carousel para o tema escuro */
+            .ui-carousel .ui-carousel-content {
+                background: transparent !important;
+            }
+
+            .ui-carousel .ui-carousel-header {
+                background: transparent !important;
+                border: none !important;
+                color: #e2e8f0 !important;
+            }
+
+            .ui-carousel .ui-carousel-prev,
+            .ui-carousel .ui-carousel-next {
+                background: rgba(124,58,237,0.15) !important;
+                border: 1px solid rgba(124,58,237,0.25) !important;
+                color: #a78bfa !important;
+                border-radius: 50% !important;
+                transition: all 0.25s ease !important;
+            }
+
+            .ui-carousel .ui-carousel-prev:hover,
+            .ui-carousel .ui-carousel-next:hover {
+                background: rgba(124,58,237,0.35) !important;
+                color: #fff !important;
+            }
+
+            .ui-carousel .ui-carousel-page-links {
+                display: flex;
+                gap: 6px;
+                justify-content: center;
+                margin-top: 16px;
+            }
+
+            .ui-carousel .ui-carousel-page-link {
+                width: 8px;
+                height: 8px;
+                border-radius: 50%;
+                background: rgba(148,163,184,0.25) !important;
+                transition: all 0.2s ease;
+            }
+
+            .ui-carousel .ui-carousel-page-link.ui-icon-radio-on {
+                background: #7c3aed !important;
+                transform: scale(1.3);
+            }
+
+            /* --- Stats bar --- */
+            .gl-stats {
+                display: flex;
+                gap: 16px;
+                justify-content: center;
+                flex-wrap: wrap;
+                margin-bottom: 48px;
+            }
+
+            .gl-stat-card {
+                background: #16162a;
+                border: 1px solid rgba(139,92,246,0.15);
+                border-radius: 12px;
+                padding: 20px 32px;
+                text-align: center;
+                min-width: 130px;
+            }
+
+            .gl-stat-number {
+                font-size: 2rem;
+                font-weight: 800;
+                background: linear-gradient(135deg, #a78bfa, #60a5fa);
+                -webkit-background-clip: text;
+                -webkit-text-fill-color: transparent;
+                background-clip: text;
+                display: block;
+                line-height: 1;
+                margin-bottom: 4px;
+            }
+
+            .gl-stat-label {
+                font-size: 0.78rem;
+                color: rgba(148,163,184,0.6);
+                text-transform: uppercase;
+                letter-spacing: 0.5px;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+        <div class="gl-home">
+
+            <!-- HERO -->
+            <div class="gl-hero">
+                <h1 class="gl-hero-title">GameLog</h1>
+                <p class="gl-hero-sub">Game Inventory Manager</p>
+                <p class="gl-hero-desc">
+                    Organize sua biblioteca de jogos, acompanhe seu progresso,
+                    gerencie emprestimos e construa sua lista de desejos num so lugar.
+                </p>
+
+                <!-- BOTOES PRINCIPAIS -->
+                <div class="gl-actions">
+                    <h:link outcome="/admin/backlog" styleClass="gl-btn gl-btn-primary">
+                        <i class="pi pi-list"/>
+                        Meu Backlog
+                    </h:link>
+                    <h:link outcome="/admin/emprestimo" styleClass="gl-btn gl-btn-secondary">
+                        <i class="pi pi-share-alt"/>
+                        Meus Emprestimos
+                    </h:link>
+                    <h:link outcome="/admin/wishlist" styleClass="gl-btn gl-btn-secondary">
+                        <i class="pi pi-heart"/>
+                        Minha Wishlist
+                    </h:link>
+                </div>
+
+                <!-- STATS -->
+                <div class="gl-stats">
+                    <div class="gl-stat-card">
+                        <span class="gl-stat-number">#{backlogController.totalJogos}</span>
+                        <span class="gl-stat-label">Jogos</span>
+                    </div>
+                    <div class="gl-stat-card">
+                        <span class="gl-stat-number">#{backlogController.totalConcluidos}</span>
+                        <span class="gl-stat-label">Concluidos</span>
+                    </div>
+                    <div class="gl-stat-card">
+                        <span class="gl-stat-number">#{backlogController.totalPlatinados}</span>
+                        <span class="gl-stat-label">Platinados</span>
+                    </div>
+                    <div class="gl-stat-card">
+                        <span class="gl-stat-number">#{backlogController.totalHoras}h</span>
+                        <span class="gl-stat-label">Horas Jogadas</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARROSSEL -->
+            <div class="gl-carousel-section">
+                <div class="gl-section-title">
+                    <i class="pi pi-th-large"/>
+                    Minha Biblioteca
+                </div>
+
+                <h:panelGroup rendered="#{empty backlogController.backlogList}">
+                    <div class="gl-empty-carousel">
+                        <i class="pi pi-inbox"/>
+                        Seu backlog esta vazio. Adicione jogos para ve-los aqui!
+                    </div>
+                </h:panelGroup>
+
+                <h:panelGroup rendered="#{not empty backlogController.backlogList}">
+                    <p:carousel value="#{backlogController.backlogList}" var="jogo"
+                                numVisible="5" numScroll="2"
+                                responsive="true"
+                                style="background:transparent;border:none"
+                                responsiveOptions="#{backlogController.carouselResponsiveOptions}">
+
+                        <p:column>
+                            <div class="gl-game-card">
+
+                                <!-- Capa do jogo -->
+                                <h:panelGroup rendered="#{not empty jogo.capaUrl}">
+                                    <h:graphicImage value="#{jogo.capaUrl}"
+                                                    styleClass="gl-game-cover"
+                                                    alt="#{jogo.tituloJogo}"/>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty jogo.capaUrl}">
+                                    <div class="gl-game-cover-placeholder">
+                                        <i class="pi pi-image"/>
+                                        <span>Sem capa</span>
+                                    </div>
+                                </h:panelGroup>
+
+                                <!-- Informacoes -->
+                                <div class="gl-game-info">
+                                    <p class="gl-game-title" title="#{jogo.tituloJogo}">
+                                        #{jogo.tituloJogo}
+                                    </p>
+
+                                    <div>
+                                        <!-- Badge de status -->
+                                        <h:panelGroup rendered="#{jogo.status == 'Por Jogar'}">
+                                            <span class="gl-game-status gl-status-por-jogar">Por Jogar</span>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{jogo.status == 'A Jogar'}">
+                                            <span class="gl-game-status gl-status-a-jogar">A Jogar</span>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{jogo.status == 'Concluido'}">
+                                            <span class="gl-game-status gl-status-concluido">Concluido</span>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{jogo.status == 'Platinado'}">
+                                            <span class="gl-game-status gl-status-platinado">Platinado</span>
+                                        </h:panelGroup>
+
+                                        <!-- Avaliacao se houver -->
+                                        <h:panelGroup rendered="#{jogo.avaliacao != null}">
+                                            <div class="gl-game-rating">
+                                                <i class="pi pi-star-fill"/>
+                                                <strong>#{jogo.avaliacao}</strong>
+                                                <span>/10</span>
+                                            </div>
+                                        </h:panelGroup>
+                                    </div>
+                                </div>
+                            </div>
+                        </p:column>
+                    </p:carousel>
+                </h:panelGroup>
+            </div>
+
+        </div>
+    </ui:define>
+
+</ui:composition>

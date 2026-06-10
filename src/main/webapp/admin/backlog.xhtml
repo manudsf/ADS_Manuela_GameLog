@@ -1,0 +1,298 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title"><h:outputText value="GameLog - Backlog"/></ui:define>
+
+    <ui:define name="head">
+        <style>
+            .gl-badge { display:inline-block; padding:3px 12px; border-radius:20px; font-size:0.75rem; font-weight:600; white-space:nowrap; }
+            .gl-badge-por-jogar { background:rgba(148,163,184,0.12); color:#94a3b8; }
+            .gl-badge-a-jogar   { background:rgba(37,99,235,0.15);   color:#60a5fa; }
+            .gl-badge-concluido { background:rgba(16,185,129,0.15);  color:#10b981; }
+            .gl-badge-platinado { background:rgba(124,58,237,0.2);   color:#a78bfa; }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <!-- Filtros -->
+        <h:form id="frmFiltros">
+            <p:fieldset legend="Filtrar Backlog" toggleable="true" collapsed="false">
+                <div class="grid">
+                    <div class="col-12 md:col-5">
+                        <p:outputLabel value="Título do Jogo:" for="filtroTitulo"/>
+                        <p:inputText id="filtroTitulo" value="#{backlogController.filtroTitulo}"
+                                     placeholder="Buscar por título..." style="width:100%"/>
+                    </div>
+                    <div class="col-12 md:col-4">
+                        <p:outputLabel value="Status:" for="filtroStatus"/>
+                        <p:selectOneMenu id="filtroStatus" value="#{backlogController.filtroStatus}" style="width:100%">
+                            <f:selectItem itemLabel="Todos os status" itemValue=""/>
+                            <f:selectItems value="#{backlogController.statusOptions}"
+                                           var="st" itemValue="#{st.descricao}" itemLabel="#{st.descricao}"/>
+                        </p:selectOneMenu>
+                    </div>
+                </div>
+                <div class="grid" style="margin-top:10px">
+                    <div class="col-12">
+                        <p:commandButton value="Filtrar" icon="pi pi-search"
+                                         actionListener="#{backlogController.filtrar()}"
+                                         update=":frmList" styleClass="mr-2"/>
+                        <p:commandButton value="Limpar" icon="pi pi-times" styleClass="p-button-secondary"
+                                         actionListener="#{backlogController.limparFiltros()}"
+                                         update=":frmFiltros :frmList"/>
+                    </div>
+                </div>
+            </p:fieldset>
+        </h:form>
+
+        <!-- Tabela Principal -->
+        <h:form id="frmList">
+            <h:panelGroup id="pngList">
+                <p:growl id="growl" showDetail="true"/>
+                <p:fieldset legend="Backlog de Jogos" toggleable="true">
+                    <p:dataTable id="datalist" value="#{backlogController.backlogList}" var="item"
+                                 selectionMode="single" selection="#{backlogController.selected}"
+                                 widgetVar="datalistBacklogWidgetVar"
+                                 rowKey="#{item.id}"
+                                 paginator="true" rows="10" rowsPerPageTemplate="5,10,25,50"
+                                 emptyMessage="Nenhum jogo no backlog...">
+
+                        <p:ajax event="rowSelect"   update="btnEdit btnDelete btnView"/>
+                        <p:ajax event="rowUnselect" update="btnEdit btnDelete btnView"/>
+
+                        <p:column width="4%" sortBy="#{item.id}">
+                            <f:facet name="header"><h:outputText value="ID"/></f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+
+                        <p:column width="25%" sortBy="#{item.tituloJogo}">
+                            <f:facet name="header"><h:outputText value="Jogo"/></f:facet>
+                            <h:outputText value="#{item.tituloJogo}"/>
+                        </p:column>
+
+                        <p:column width="12%" sortBy="#{item.status}">
+                            <f:facet name="header"><h:outputText value="Status"/></f:facet>
+                            <h:panelGroup rendered="#{item.status == 'Por Jogar'}"><span class="gl-badge gl-badge-por-jogar">Por Jogar</span></h:panelGroup>
+                            <h:panelGroup rendered="#{item.status == 'A Jogar'}"><span class="gl-badge gl-badge-a-jogar">A Jogar</span></h:panelGroup>
+                            <h:panelGroup rendered="#{item.status == 'Concluido'}"><span class="gl-badge gl-badge-concluido">Concluido</span></h:panelGroup>
+                            <h:panelGroup rendered="#{item.status == 'Platinado'}"><span class="gl-badge gl-badge-platinado">Platinado</span></h:panelGroup>
+                        </p:column>
+
+                        <p:column width="8%" sortBy="#{item.horasJogadas}">
+                            <f:facet name="header"><h:outputText value="Horas"/></f:facet>
+                            <h:outputText value="#{backlogController.getHorasExibicao(item)}"/>
+                        </p:column>
+
+                        <p:column width="10%" sortBy="#{item.avaliacao}">
+                            <f:facet name="header"><h:outputText value="Avaliação"/></f:facet>
+                            <h:outputText value="#{backlogController.getAvaliacaoExibicao(item)}"/>
+                        </p:column>
+
+                        <p:column width="10%" sortBy="#{item.dataInicio}">
+                            <f:facet name="header"><h:outputText value="Início"/></f:facet>
+                            <h:outputText value="#{item.dataInicio}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="10%" sortBy="#{item.dataTermino}">
+                            <f:facet name="header"><h:outputText value="Término"/></f:facet>
+                            <h:outputText value="#{item.dataTermino}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="21%">
+                            <f:facet name="header"><h:outputText value="Observação"/></f:facet>
+                            <h:outputText value="#{item.observacao}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCreate" value="Adicionar Jogo" icon="pi pi-plus"
+                                             actionListener="#{backlogController.prepareAdicionar()}"
+                                             update=":CreateForm" onclick="PF('dlgCreate').show()"/>
+
+                            <p:commandButton id="btnEdit" icon="pi pi-user-edit" value="Editar"
+                                             update="formEdit" oncomplete="PF('dlgEdit').show()"
+                                             disabled="#{empty backlogController.selected}"/>
+
+                            <p:commandButton id="btnDelete" icon="pi pi-trash" value="Excluir"
+                                             actionListener="#{backlogController.deletarBacklog()}" update="frmList"
+                                             disabled="#{empty backlogController.selected}">
+                                <p:confirm header="Confirmar Exclusão" message="Confirma a exclusão deste registro?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+
+                            <p:commandButton id="btnView" icon="pi pi-eye" value="Detalhes"
+                                             update="formView" oncomplete="PF('dlgView').show()"
+                                             disabled="#{empty backlogController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:fieldset>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no"  icon="fa fa-times"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+        </h:form>
+
+        <!-- Dialog: Adicionar Jogo ao Backlog -->
+        <p:dialog header="Adicionar Jogo ao Backlog" widgetVar="dlgCreate" height="560" width="660" showEffect="fade" modal="true" resizable="false">
+            <h:form id="CreateForm">
+                <p:growl id="growlCreate" showDetail="true"/>
+                <h:panelGrid id="pngCadastro" columns="2" cellpadding="8">
+
+                    <p:outputLabel value="Jogo: *" for="iptTituloJogo"/>
+                    <p:inputText id="iptTituloJogo" value="#{backlogController.backlog.tituloJogo}"
+                                 required="true" requiredMessage="O título do jogo é obrigatório!"
+                                 placeholder="Ex: Hollow Knight" maxlength="500" style="width:280px"/>
+
+                    <p:outputLabel value="Status: *" for="somStatus"/>
+                    <p:selectOneMenu id="somStatus" value="#{backlogController.backlog.status}"
+                                     required="true" requiredMessage="O status é obrigatório" style="width:280px">
+                        <f:selectItem itemLabel="Selecione o status..." itemValue=""/>
+                        <f:selectItems value="#{backlogController.statusOptions}"
+                                       var="st" itemValue="#{st.descricao}" itemLabel="#{st.descricao}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Horas Jogadas:" for="iptHoras"/>
+                    <p:inputNumber id="iptHoras" value="#{backlogController.backlog.horasJogadas}"
+                                   minValue="0" decimalPlaces="0" placeholder="Ex: 25" style="width:280px"/>
+
+                    <p:outputLabel value="Avaliação (1-10):" for="iptAvaliacao"/>
+                    <p:inputNumber id="iptAvaliacao" value="#{backlogController.backlog.avaliacao}"
+                                   minValue="1" maxValue="10" decimalPlaces="0"
+                                   disabled="true"
+                                   placeholder="Disponível apenas ao concluir o jogo" style="width:280px"/>
+
+                    <p:outputLabel value="Data Início:" for="iptDataInicio"/>
+                    <p:datePicker id="iptDataInicio" value="#{backlogController.backlog.dataInicio}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="Data Término:" for="iptDataTermino"/>
+                    <p:datePicker id="iptDataTermino" value="#{backlogController.backlog.dataTermino}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="URL da Capa:" for="iptCapaUrl"/>
+                    <p:inputText id="iptCapaUrl" value="#{backlogController.backlog.capaUrl}"
+                                 placeholder="https://..." maxlength="1000" style="width:280px"/>
+
+                    <p:outputLabel value="Observação:" for="iptObservacao"/>
+                    <p:inputTextarea id="iptObservacao" rows="3" cols="30" autoResize="false"
+                                     value="#{backlogController.backlog.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton actionListener="#{backlogController.adicionarBacklog()}"
+                                     icon="pi pi-save" value="Adicionar"
+                                     update=":frmList :CreateForm:growlCreate"
+                                     oncomplete="if(!args.validationFailed) PF('dlgCreate').hide()"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgCreate').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Editar Backlog -->
+        <p:dialog header="Editar Backlog" widgetVar="dlgEdit" height="580" width="660" showEffect="fade" modal="true" resizable="false">
+            <h:form id="formEdit">
+                <p:growl id="growlEdit" showDetail="true"/>
+                <h:panelGrid id="pngEdicao" columns="2" cellpadding="8" rendered="#{backlogController.selected != null}">
+
+                    <p:outputLabel value="Jogo:"/>
+                    <p:outputLabel value="#{backlogController.selected.tituloJogo}" style="font-weight:bold"/>
+
+                    <p:outputLabel value="Status: *" for="somStatusEdit"/>
+                    <p:selectOneMenu id="somStatusEdit" value="#{backlogController.selected.status}"
+                                     required="true" requiredMessage="O status é obrigatório" style="width:280px">
+                        <f:selectItem itemLabel="Selecione o status..." itemValue=""/>
+                        <f:selectItems value="#{backlogController.statusOptions}"
+                                       var="st" itemValue="#{st.descricao}" itemLabel="#{st.descricao}"/>
+                        <p:ajax update="pnlAvaliacaoEdit" event="change"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Horas Jogadas:" for="iptHorasEdit"/>
+                    <p:inputNumber id="iptHorasEdit" value="#{backlogController.selected.horasJogadas}"
+                                   minValue="0" decimalPlaces="0" style="width:280px"/>
+
+                    <p:outputLabel value="Avaliação (1-10):"/>
+                    <h:panelGroup id="pnlAvaliacaoEdit">
+                        <p:inputNumber id="iptAvaliacaoEdit" value="#{backlogController.selected.avaliacao}"
+                                       minValue="1" maxValue="10" decimalPlaces="0"
+                                       disabled="#{!backlogController.selected.avaliacaoLiberada}"
+                                       placeholder="#{backlogController.selected.avaliacaoLiberada ? '' : 'Conclua o jogo primeiro'}"
+                                       style="width:280px"/>
+                    </h:panelGroup>
+
+                    <p:outputLabel value="Data Início:" for="iptDataInicioEdit"/>
+                    <p:datePicker id="iptDataInicioEdit" value="#{backlogController.selected.dataInicio}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="Data Término:" for="iptDataTerminoEdit"/>
+                    <p:datePicker id="iptDataTerminoEdit" value="#{backlogController.selected.dataTermino}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="URL da Capa:" for="iptCapaUrlEdit"/>
+                    <p:inputText id="iptCapaUrlEdit" value="#{backlogController.selected.capaUrl}"
+                                 placeholder="https://..." maxlength="1000" style="width:280px"/>
+
+                    <p:outputLabel value="Observação:" for="iptObservacaoEdit"/>
+                    <p:inputTextarea id="iptObservacaoEdit" rows="3" cols="30" autoResize="false"
+                                     value="#{backlogController.selected.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton id="btnSalvarEdicao" value="Salvar" icon="pi pi-save"
+                                     update="@form :frmList"
+                                     oncomplete="if(!args.validationFailed) PF('dlgEdit').hide()"
+                                     action="#{backlogController.editarBacklog()}"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgEdit').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Visualizar Detalhes -->
+        <p:dialog header="Detalhes do Backlog" widgetVar="dlgView" height="420" width="520" showEffect="fade" modal="true" resizable="false">
+            <h:form id="formView">
+                <h:panelGrid id="pngView" columns="2" cellpadding="8" rendered="#{backlogController.selected != null}">
+                    <p:outputLabel value="Jogo:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{backlogController.selected.tituloJogo}"/>
+
+                    <p:outputLabel value="Status:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{backlogController.selected.status}"/>
+
+                    <p:outputLabel value="Horas Jogadas:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{backlogController.getHorasExibicao(backlogController.selected)}"/>
+
+                    <p:outputLabel value="Avaliação:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{backlogController.getAvaliacaoExibicao(backlogController.selected)}"/>
+
+                    <p:outputLabel value="Data Início:" style="font-weight:bold"/>
+                    <h:outputText value="#{backlogController.selected.dataInicio}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="Data Término:" style="font-weight:bold"/>
+                    <h:outputText value="#{backlogController.selected.dataTermino}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="Observação:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{backlogController.selected.observacao}"/>
+
+                    <p:outputLabel value="Cadastrado em:" style="font-weight:bold"/>
+                    <h:outputText value="#{backlogController.selected.datahorareg}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

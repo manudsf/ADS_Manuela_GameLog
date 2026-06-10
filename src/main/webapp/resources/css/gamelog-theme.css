@@ -1,0 +1,671 @@
+/* ================================================================
+   GameLog - Tema Global Fase 3
+   Paleta: Preto #0f0f1e | Roxo #7c3aed | Azul #2563eb | Verde #10b981
+   ================================================================ */
+
+/* ---- Variaveis ---- */
+:root {
+    --gl-bg:          #0f0f1e;
+    --gl-bg-card:     #16162a;
+    --gl-bg-input:    #1e1e35;
+    --gl-border:      rgba(139, 92, 246, 0.18);
+    --gl-purple:      #7c3aed;
+    --gl-purple-light:#a78bfa;
+    --gl-blue:        #2563eb;
+    --gl-green:       #10b981;
+    --gl-red:         #ef4444;
+    --gl-text:        #e2e8f0;
+    --gl-text-muted:  rgba(148, 163, 184, 0.65);
+    --gl-gradient:    linear-gradient(135deg, #7c3aed, #2563eb);
+    --gl-radius:      10px;
+    --gl-shadow:      0 4px 24px rgba(0,0,0,0.45);
+}
+
+/* ================================================================
+   LAYOUT GERAL
+   ================================================================ */
+
+body,
+.layout-wrapper {
+    background: var(--gl-bg) !important;
+    color: var(--gl-text) !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+.layout-content {
+    background: var(--gl-bg) !important;
+    padding: 24px !important;
+}
+
+/* ================================================================
+   TOPBAR
+   ================================================================ */
+
+.layout-topbar {
+    background: #12122080 !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+}
+
+.layout-topbar .topbar-search input {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+}
+
+.layout-topbar .topbar-search .pi {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-topbar .topbar-item-name,
+.layout-topbar .profile-name {
+    color: var(--gl-text) !important;
+}
+
+.layout-topbar .topbar-menu > li > a > i {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-topbar .topbar-badge {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.menu-btn i,
+.topbar-menu-btn i,
+.rightpanel-btn i {
+    color: var(--gl-text-muted) !important;
+}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+
+.layout-sidebar {
+    background: linear-gradient(180deg, #0d0d1f 0%, #12122a 100%) !important;
+    border-right: 1px solid var(--gl-border) !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.4) !important;
+}
+
+.layout-sidebar-logo {
+    border-bottom: 1px solid var(--gl-border) !important;
+}
+
+.layout-sidebar-anchor i {
+    color: var(--gl-purple-light) !important;
+}
+
+/* Items do menu */
+.layout-menu li a,
+.layout-menu li .p-menuitem-link {
+    color: var(--gl-text-muted) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s ease !important;
+    margin: 2px 8px !important;
+}
+
+.layout-menu li a:hover,
+.layout-menu li .p-menuitem-link:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+    transform: translateX(3px) !important;
+}
+
+.layout-menu li a .p-menuitem-icon,
+.layout-menu li .p-menuitem-link .p-menuitem-icon {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-menu li a:hover .p-menuitem-icon,
+.layout-menu li .p-menuitem-link:hover .p-menuitem-icon {
+    color: var(--gl-purple-light) !important;
+}
+
+/* Item ativo */
+.layout-menu li.active-menuitem > a,
+.layout-menu li.active-menuitem > .p-menuitem-link {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+    border-left: 3px solid var(--gl-purple) !important;
+}
+
+.layout-menu li.active-menuitem > a .p-menuitem-icon {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   FIELDSET (paineis de filtro e tabela)
+   ================================================================ */
+
+.ui-fieldset,
+.ui-widget-content {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: var(--gl-radius) !important;
+    box-shadow: var(--gl-shadow) !important;
+}
+
+.ui-fieldset-legend,
+.ui-fieldset .ui-fieldset-legend {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-purple-light) !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 6px 14px !important;
+}
+
+/* ================================================================
+   INPUTS, SELECTS, TEXTAREAS
+   ================================================================ */
+
+.ui-inputtext,
+.ui-inputfield,
+.ui-selectonemenu,
+.ui-inputnumber input,
+.ui-inputtextarea,
+input.ui-inputfield,
+.ui-datepicker-trigger {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s ease !important;
+}
+
+.ui-inputtext:focus,
+.ui-inputfield:focus,
+.ui-inputnumber input:focus,
+.ui-inputtextarea:focus {
+    border-color: var(--gl-purple) !important;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15) !important;
+    outline: none !important;
+}
+
+.ui-inputtext::placeholder,
+input::placeholder {
+    color: var(--gl-text-muted) !important;
+}
+
+/* Dropdown */
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    background: var(--gl-bg-input) !important;
+    border-left: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+}
+
+.ui-selectonemenu-panel,
+.ui-selectonemenu-items-wrapper {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-selectonemenu-item {
+    color: var(--gl-text) !important;
+}
+
+.ui-selectonemenu-item:hover,
+.ui-selectonemenu-item.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+/* Labels */
+.ui-outputlabel,
+label {
+    color: var(--gl-text-muted) !important;
+    font-size: 13px !important;
+}
+
+/* ================================================================
+   BOTOES
+   ================================================================ */
+
+.ui-button {
+    background: var(--gl-gradient) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 2px 12px rgba(124, 58, 237, 0.3) !important;
+}
+
+.ui-button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45) !important;
+    filter: brightness(1.1) !important;
+}
+
+.ui-button:active {
+    transform: translateY(0) !important;
+}
+
+/* Botao secundario (Limpar, Cancelar) */
+.ui-button.p-button-secondary,
+.ui-button.ui-button-secondary {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+    box-shadow: none !important;
+}
+
+.ui-button.p-button-secondary:hover,
+.ui-button.ui-button-secondary:hover {
+    background: rgba(255,255,255,0.1) !important;
+    color: var(--gl-text) !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Botao danger (Excluir) */
+.ui-button.p-button-danger,
+.ui-button.ui-button-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    box-shadow: 0 2px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ================================================================
+   DATATABLE
+   ================================================================ */
+
+.ui-datatable {
+    background: var(--gl-bg-card) !important;
+    border: none !important;
+    border-radius: var(--gl-radius) !important;
+    overflow: hidden !important;
+}
+
+.ui-datatable .ui-datatable-header {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+}
+
+/* Header das colunas */
+.ui-datatable thead th,
+.ui-datatable .ui-column-title {
+    background: #1a1a30 !important;
+    color: var(--gl-purple-light) !important;
+    border-bottom: 2px solid var(--gl-border) !important;
+    border-right: none !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.3px !important;
+    padding: 14px 12px !important;
+    text-transform: uppercase !important;
+}
+
+/* Linhas */
+.ui-datatable tbody tr {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.08) !important;
+    transition: background 0.2s ease !important;
+}
+
+.ui-datatable tbody tr:hover {
+    background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.ui-datatable tbody tr td {
+    color: var(--gl-text) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.07) !important;
+    padding: 13px 12px !important;
+    font-size: 14px !important;
+}
+
+/* Linha selecionada */
+.ui-datatable tbody tr.ui-state-highlight td,
+.ui-datatable tbody tr.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.18) !important;
+    color: var(--gl-purple-light) !important;
+    border-left: 3px solid var(--gl-purple) !important;
+}
+
+/* Footer da tabela (botoes) */
+.ui-datatable tfoot td,
+.ui-datatable .ui-datatable-footer {
+    background: #1a1a30 !important;
+    border-top: 1px solid var(--gl-border) !important;
+    padding: 12px !important;
+}
+
+/* Paginacao */
+.ui-paginator {
+    background: var(--gl-bg-card) !important;
+    border: none !important;
+    border-top: 1px solid var(--gl-border) !important;
+    padding: 10px !important;
+}
+
+.ui-paginator .ui-paginator-page,
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-prev,
+.ui-paginator .ui-paginator-next,
+.ui-paginator .ui-paginator-last {
+    color: var(--gl-text-muted) !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+}
+
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.ui-paginator .ui-paginator-page:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+.ui-paginator .ui-paginator-rpp-options {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 6px !important;
+}
+
+/* ================================================================
+   DIALOGS
+   ================================================================ */
+
+.ui-dialog {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7) !important;
+    overflow: hidden !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: linear-gradient(135deg, #1a0a2e, #0f172a) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    padding: 16px 20px !important;
+    border-radius: 14px 14px 0 0 !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    color: var(--gl-text-muted) !important;
+    transition: color 0.2s !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close:hover {
+    color: var(--gl-red) !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    background: var(--gl-bg-card) !important;
+    color: var(--gl-text) !important;
+    padding: 24px 28px !important;
+}
+
+/* Overlay do dialog */
+.ui-widget-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+/* ================================================================
+   PANELGRID dentro dos dialogs
+   ================================================================ */
+
+.ui-panelgrid td {
+    padding: 8px 10px !important;
+    border: none !important;
+    background: transparent !important;
+    color: var(--gl-text) !important;
+    vertical-align: middle !important;
+}
+
+/* ================================================================
+   GROWL / MENSAGENS
+   ================================================================ */
+
+.ui-growl-item-container.ui-state-highlight.ui-growl-message-info {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    border-radius: 10px !important;
+}
+
+.ui-growl-item-container.ui-state-highlight.ui-growl-message-error {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    border-radius: 10px !important;
+}
+
+.ui-growl-message-info .ui-growl-message p,
+.ui-growl-message-info .ui-growl-title {
+    color: var(--gl-green) !important;
+}
+
+.ui-growl-message-error .ui-growl-message p,
+.ui-growl-message-error .ui-growl-title {
+    color: #fca5a5 !important;
+}
+
+/* ================================================================
+   CONFIRM DIALOG
+   ================================================================ */
+
+.ui-confirmdialog {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 14px !important;
+}
+
+.ui-confirmdialog .ui-dialog-titlebar {
+    background: linear-gradient(135deg, #1a0a2e, #0f172a) !important;
+    color: var(--gl-text) !important;
+}
+
+.ui-confirmdialog .ui-dialog-content {
+    background: var(--gl-bg-card) !important;
+    color: var(--gl-text) !important;
+}
+
+.ui-confirmdialog .ui-confirmdialog-message {
+    color: var(--gl-text) !important;
+}
+
+/* ================================================================
+   AUTOCOMPLETE
+   ================================================================ */
+
+.ui-autocomplete-panel {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-autocomplete-item {
+    color: var(--gl-text) !important;
+    padding: 10px 14px !important;
+}
+
+.ui-autocomplete-item:hover,
+.ui-autocomplete-item.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   DATEPICKER
+   ================================================================ */
+
+.ui-datepicker {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    background: #12122a !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    color: var(--gl-purple-light) !important;
+    font-weight: 700 !important;
+}
+
+.ui-datepicker table th {
+    color: var(--gl-text-muted) !important;
+    font-weight: 600 !important;
+}
+
+.ui-datepicker table td a,
+.ui-datepicker table td span {
+    color: var(--gl-text) !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+}
+
+.ui-datepicker table td a:hover {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+.ui-datepicker table td.ui-datepicker-today a {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+    font-weight: 700 !important;
+}
+
+.ui-datepicker table td a.ui-state-active,
+.ui-datepicker table td.ui-state-highlight a {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+    color: var(--gl-text-muted) !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   SELECT BOOLEAN BUTTON (devolvido?)
+   ================================================================ */
+
+.ui-selectbooleanbutton {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s !important;
+}
+
+.ui-selectbooleanbutton.ui-state-active {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border-color: var(--gl-green) !important;
+    color: var(--gl-green) !important;
+}
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gl-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.4);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 58, 237, 0.7);
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+
+.layout-footer {
+    background: #12122a !important;
+    border-top: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-footer a {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   AJAXSTATUS SPINNER
+   ================================================================ */
+
+.layout-ajax-loader-icon {
+    color: var(--gl-purple) !important;
+}
+
+/* ================================================================
+   INPUT NUMBER - correcao do fundo
+   ================================================================ */
+
+.ui-inputnumber {
+    background: transparent !important;
+}
+
+.ui-inputnumber .ui-inputnumber-input {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+}
+
+/* ================================================================
+   CORRECOES MANHATTAN ESPECIFICAS
+   ================================================================ */
+
+/* Remove fundo branco de varios widgets */
+.ui-widget,
+.ui-widget-content,
+.ui-widget-header {
+    border-color: var(--gl-border) !important;
+}
+
+/* Força cor do texto em todos os spans gerados pelo PF */
+.ui-widget span,
+.ui-widget label {
+    color: var(--gl-text) !important;
+}
+
+/* Tabs e outros paineis */
+.ui-tabview .ui-tabview-nav {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+}
+
+.ui-tabview .ui-tabview-panels {
+    background: var(--gl-bg-card) !important;
+}
+
+/* Right panel */
+.layout-rightpanel {
+    background: #12122a !important;
+    border-left: 1px solid var(--gl-border) !important;
+}
+
