@@ -1,0 +1,226 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">
+        <h:outputText value="GameLog - Empréstimos"/>
+    </ui:define>
+
+    <ui:define name="content">
+        <h:form id="frmList">
+            <h:panelGroup id="pngList">
+                <p:growl id="growl" showDetail="true"/>
+                <p:fieldset legend="Gestão de Empréstimos" toggleable="true">
+                    <p:dataTable id="datalist" value="#{emprestimoController.emprestimoList}" var="item"
+                                 selectionMode="single" selection="#{emprestimoController.selected}"
+                                 widgetVar="datalistEmprestimoWidgetVar"
+                                 rowKey="#{item.id}"
+                                 paginator="true"
+                                 rows="10"
+                                 rowsPerPageTemplate="5,10,25,50"
+                                 emptyMessage="Nenhum empréstimo registrado...">
+                        <p:ajax event="rowSelect"   update="btnEdit btnDelete btnView"/>
+                        <p:ajax event="rowUnselect" update="btnEdit btnDelete btnView"/>
+
+                        <p:column width="4%" sortBy="#{item.id}">
+                            <f:facet name="header"><h:outputText value="ID"/></f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+
+                        <p:column width="20%" sortBy="#{item.tituloJogo}" filterBy="#{item.tituloJogo}" filterMatchMode="contains">
+                            <f:facet name="header"><h:outputText value="Jogo"/></f:facet>
+                            <h:outputText value="#{item.tituloJogo}"/>
+                        </p:column>
+
+                        <p:column width="17%" sortBy="#{item.nomeAmigo}" filterBy="#{item.nomeAmigo}" filterMatchMode="contains">
+                            <f:facet name="header"><h:outputText value="Emprestado a"/></f:facet>
+                            <h:outputText value="#{item.nomeAmigo}"/>
+                        </p:column>
+
+                        <p:column width="11%" sortBy="#{item.dataEmprestimo}">
+                            <f:facet name="header"><h:outputText value="Data Empréstimo"/></f:facet>
+                            <h:outputText value="#{item.dataEmprestimo}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="11%" sortBy="#{item.previsaoDevolucao}">
+                            <f:facet name="header"><h:outputText value="Prev. Devolução"/></f:facet>
+                            <h:outputText value="#{item.previsaoDevolucao}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="8%" sortBy="#{item.devolvido}">
+                            <f:facet name="header"><h:outputText value="Devolvido?"/></f:facet>
+                            <h:outputText value="#{item.devolvido ? 'Sim' : 'Não'}"/>
+                        </p:column>
+
+                        <p:column width="15%" filterBy="#{item.observacao}">
+                            <f:facet name="header"><h:outputText value="Observação"/></f:facet>
+                            <h:outputText value="#{item.observacao}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCreate" value="Registrar Empréstimo" icon="pi pi-plus"
+                                             actionListener="#{emprestimoController.prepareAdicionar()}"
+                                             update=":CreateForm"
+                                             onclick="PF('dlgCreate').show()"/>
+
+                            <p:commandButton id="btnEdit" icon="pi pi-user-edit" value="Editar"
+                                             update="formEdit" oncomplete="PF('dlgEdit').show()"
+                                             disabled="#{empty emprestimoController.selected}"/>
+
+                            <p:commandButton id="btnDelete" icon="pi pi-trash" value="Excluir"
+                                             actionListener="#{emprestimoController.deletarEmprestimo()}" update="frmList"
+                                             disabled="#{empty emprestimoController.selected}">
+                                <p:confirm header="Confirmar Exclusão" message="Confirma a exclusão deste empréstimo?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+
+                            <p:commandButton id="btnView" icon="pi pi-eye" value="Detalhes"
+                                             update="formView" oncomplete="PF('dlgView').show()"
+                                             disabled="#{empty emprestimoController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:fieldset>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>
+                    <p:commandButton value="Não" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+        </h:form>
+
+        <!-- Dialog: Registrar Empréstimo -->
+        <p:dialog header="Registrar Empréstimo" widgetVar="dlgCreate" height="500" width="660" showEffect="fade" modal="true" resizable="false">
+            <h:form id="CreateForm">
+                <p:growl id="growlCreate" showDetail="true"/>
+                <h:panelGrid id="pngCadastro" columns="2" cellpadding="8">
+
+                    <p:outputLabel value="Jogo: *" for="acJogoEmp"/>
+                    <p:autoComplete id="acJogoEmp"
+                                    value="#{emprestimoController.emprestimo.tituloJogo}"
+                                    completeMethod="#{emprestimoController.completarJogoDoBacklog}"
+                                    required="true" requiredMessage="O título do jogo é obrigatório!"
+                                    placeholder="Digite para buscar no backlog..."
+                                    minQueryLength="0"
+                                    dropdown="true"
+                                    forceSelection="false"
+                                    style="width:280px"/>
+
+                    <p:outputLabel value="Emprestado a: *" for="iptNomeAmigo"/>
+                    <p:inputText id="iptNomeAmigo" style="width:280px" required="true"
+                                 requiredMessage="O nome é obrigatório"
+                                 value="#{emprestimoController.emprestimo.nomeAmigo}" maxlength="300"/>
+
+                    <p:outputLabel value="Data do Empréstimo: *" for="dpDataEmprestimo"/>
+                    <p:datePicker id="dpDataEmprestimo" value="#{emprestimoController.emprestimo.dataEmprestimo}"
+                                  pattern="dd/MM/yyyy" showIcon="true"
+                                  required="true" requiredMessage="A data de empréstimo é obrigatória"
+                                  style="width:280px"/>
+
+                    <p:outputLabel value="Previsão Devolução:" for="dpPrevisao"/>
+                    <p:datePicker id="dpPrevisao" value="#{emprestimoController.emprestimo.previsaoDevolucao}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="Já devolvido?" for="sbbDevolvido"/>
+                    <p:selectBooleanButton id="sbbDevolvido" onIcon="pi pi-check" offIcon="pi pi-times"
+                                           value="#{emprestimoController.emprestimo.devolvido}"/>
+
+                    <p:outputLabel value="Observação:" for="iptObservacao"/>
+                    <p:inputTextarea id="iptObservacao" rows="3" cols="30" autoResize="false"
+                                     value="#{emprestimoController.emprestimo.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton actionListener="#{emprestimoController.adicionarEmprestimo()}"
+                                     icon="pi pi-save" value="Registrar"
+                                     update=":frmList :CreateForm:growlCreate"
+                                     oncomplete="if(!args.validationFailed) PF('dlgCreate').hide()"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgCreate').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Editar Empréstimo -->
+        <p:dialog header="Editar Empréstimo" widgetVar="dlgEdit" height="520" width="660" showEffect="fade" modal="true" resizable="false">
+            <h:form id="formEdit">
+                <p:growl id="growlEdit" showDetail="true"/>
+                <h:panelGrid id="pngEdicao" columns="2" cellpadding="8" rendered="#{emprestimoController.selected != null}">
+
+                    <p:outputLabel value="Jogo:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.tituloJogo}"/>
+
+                    <p:outputLabel value="Emprestado a: *" for="iptNomeAmigoEdit"/>
+                    <p:inputText id="iptNomeAmigoEdit" style="width:280px" required="true"
+                                 requiredMessage="O nome é obrigatório"
+                                 value="#{emprestimoController.selected.nomeAmigo}" maxlength="300"/>
+
+                    <p:outputLabel value="Data do Empréstimo: *" for="dpDataEmprestimoEdit"/>
+                    <p:datePicker id="dpDataEmprestimoEdit" value="#{emprestimoController.selected.dataEmprestimo}"
+                                  pattern="dd/MM/yyyy" showIcon="true"
+                                  required="true" requiredMessage="A data é obrigatória"
+                                  style="width:280px"/>
+
+                    <p:outputLabel value="Previsão Devolução:" for="dpPrevisaoEdit"/>
+                    <p:datePicker id="dpPrevisaoEdit" value="#{emprestimoController.selected.previsaoDevolucao}"
+                                  pattern="dd/MM/yyyy" showIcon="true" style="width:280px"/>
+
+                    <p:outputLabel value="Já devolvido?" for="sbbDevolvidoEdit"/>
+                    <p:selectBooleanButton id="sbbDevolvidoEdit" onIcon="pi pi-check" offIcon="pi pi-times"
+                                           value="#{emprestimoController.selected.devolvido}"/>
+
+                    <p:outputLabel value="Observação:" for="iptObservacaoEdit"/>
+                    <p:inputTextarea id="iptObservacaoEdit" rows="3" cols="30" autoResize="false"
+                                     value="#{emprestimoController.selected.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton id="btnSalvarEdicao" value="Salvar" update="@form :frmList"
+                                     oncomplete="if(!args.validationFailed) PF('dlgEdit').hide()"
+                                     icon="pi pi-save"
+                                     action="#{emprestimoController.editarEmprestimo()}"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgEdit').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Visualizar -->
+        <p:dialog header="Detalhes do Empréstimo" widgetVar="dlgView" height="360" width="520" showEffect="fade" modal="true" resizable="false">
+            <h:form id="formView">
+                <h:panelGrid id="pngView" columns="2" cellpadding="8" rendered="#{emprestimoController.selected != null}">
+                    <p:outputLabel value="ID:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.id}"/>
+
+                    <p:outputLabel value="Jogo:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.tituloJogo}"/>
+
+                    <p:outputLabel value="Emprestado a:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.nomeAmigo}"/>
+
+                    <p:outputLabel value="Data do Empréstimo:" style="font-weight:bold"/>
+                    <h:outputText value="#{emprestimoController.selected.dataEmprestimo}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="Previsão Devolução:" style="font-weight:bold"/>
+                    <h:outputText value="#{emprestimoController.selected.previsaoDevolucao}">
+                        <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="Devolvido?" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.devolvido ? 'Sim' : 'Não'}"/>
+
+                    <p:outputLabel value="Observação:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{emprestimoController.selected.observacao}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+    </ui:define>
+
+</ui:composition>

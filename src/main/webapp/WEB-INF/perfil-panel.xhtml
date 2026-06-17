@@ -1,0 +1,270 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui">
+
+    <!-- Overlay escuro -->
+    <div id="perfil-overlay" class="perfil-overlay" onclick="fecharPerfilPanel()"/>
+
+    <!-- Drawer lateral direito -->
+    <div id="perfil-panel" class="perfil-panel" role="dialog" aria-modal="true" aria-label="Editar Perfil">
+
+        <!-- Cabeçalho -->
+        <div class="perfil-header">
+            <span class="perfil-header-title">
+                <i class="pi pi-user-edit"/> Editar Perfil
+            </span>
+            <button type="button" class="perfil-close-btn"
+                    onclick="fecharPerfilPanel()" aria-label="Fechar">
+                <i class="pi pi-times"/>
+            </button>
+        </div>
+
+        <!-- Corpo -->
+        <div class="perfil-body">
+            <h:form id="formPerfil">
+
+                <!-- Growl de feedback -->
+                <p:growl id="growlPerfil" showDetail="false" life="4000" sticky="false"/>
+
+                <!-- ── Avatar ── -->
+                <div class="perfil-avatar-section">
+                    <!--
+                        Usamos <img> nativo (não p:graphicImage) para suportar
+                        Data URLs (data:image/...) geradas pelo FileReader no JS.
+                    -->
+                    <div class="perfil-avatar-ring"
+                         onclick="document.getElementById('fotoFileNativo').click()"
+                         title="Clique para trocar a foto">
+                        <img id="perfilAvatarPreview"
+                             src=""
+                             class="perfil-avatar-img"
+                             alt="Foto de perfil"/>
+                        <div class="perfil-avatar-overlay">
+                            <i class="pi pi-camera"/>
+                        </div>
+                    </div>
+                    <span class="perfil-avatar-hint">Clique na foto para trocar · PNG, JPG ou WEBP · máx 3 MB</span>
+
+                    <!--
+                        Input file nativo — invisível.
+                        O JS lê o arquivo como Base64 e escreve no hidden abaixo.
+                    -->
+                    <input type="file"
+                           id="fotoFileNativo"
+                           accept="image/png,image/jpeg,image/gif,image/webp"
+                           style="display:none"
+                           onchange="perfilHandleFoto(this)"/>
+
+                    <!-- Campo hidden transporta o Base64 ao servidor via submit JSF -->
+                    <h:inputHidden id="fotoBase64" value="#{perfilController.fotoBase64}"/>
+                </div>
+
+                <!-- ── Apelido ── -->
+                <div class="perfil-field">
+                    <label class="perfil-label" for="formPerfil:apelidoInput">
+                        <i class="pi pi-at"/> Apelido
+                    </label>
+                    <p:inputText id="apelidoInput"
+                                 value="#{perfilController.apelidoEdit}"
+                                 placeholder="Como quer ser chamado?"
+                                 maxlength="60"
+                                 styleClass="perfil-input"
+                                 autocomplete="off"/>
+                    <span class="perfil-hint">Substitui seu nome em todos os menus quando preenchido</span>
+                </div>
+
+                <!-- ── Bio ── -->
+                <div class="perfil-field">
+                    <label class="perfil-label" for="formPerfil:bioInput">
+                        <i class="pi pi-align-left"/> Bio
+                    </label>
+                    <p:inputTextarea id="bioInput"
+                                     value="#{perfilController.bioEdit}"
+                                     placeholder="Fale um pouco sobre você…"
+                                     maxlength="200"
+                                     rows="4"
+                                     autoResize="false"
+                                     styleClass="perfil-input perfil-textarea"
+                                     onkeyup="perfilContador(this)"
+                                     oninput="perfilContador(this)"/>
+                    <span id="perfil-bio-count" class="perfil-hint perfil-counter">0 / 200</span>
+                </div>
+
+                <!-- ── Ações ── -->
+                <div class="perfil-actions">
+                    <p:commandButton id="btnSalvarPerfil"
+                                     value="Salvar"
+                                     icon="pi pi-check"
+                                     styleClass="perfil-btn-save"
+                                     action="#{perfilController.salvarPerfil()}"
+                                     process="@form"
+                                     update="formPerfil:growlPerfil @(.topbar-avatar-container)"
+                                     onstart="perfilBtnLoading(true)"
+                                     oncomplete="perfilOnSalvo(xhr, status, args)"/>
+
+                    <button type="button"
+                            class="perfil-btn-cancel"
+                            onclick="fecharPerfilPanel()">
+                        <i class="pi pi-times"/> Cancelar
+                    </button>
+                </div>
+
+            </h:form>
+        </div>
+    </div>
+
+    <!-- ── Scripts ── -->
+    <h:outputScript target="body">
+        //<![CDATA[
+
+        // ── Abrir painel ──────────────────────────────────────────
+        function abrirPerfilPanel() {
+            var panel   = document.getElementById('perfil-panel');
+            var overlay = document.getElementById('perfil-overlay');
+
+            // Carrega o avatar atual da topbar no preview
+            perfilSincronizarAvatar();
+            // Atualiza o contador da bio
+            var bio = document.getElementById('formPerfil:bioInput');
+            if (bio) perfilContador(bio);
+            // Limpa o hidden de foto (nenhuma nova foto selecionada ainda)
+            var hidden = document.getElementById('formPerfil:fotoBase64');
+            if (hidden) hidden.value = '';
+
+            panel.classList.add('perfil-panel--open');
+            overlay.classList.add('perfil-overlay--visible');
+            document.body.classList.add('perfil-no-scroll');
+
+            // Foco acessível no primeiro campo
+            setTimeout(function() {
+                var inp = panel.querySelector('input[type="text"]');
+                if (inp) inp.focus();
+            }, 340);
+        }
+
+        // ── Fechar painel ─────────────────────────────────────────
+        function fecharPerfilPanel() {
+            document.getElementById('perfil-panel').classList.remove('perfil-panel--open');
+            document.getElementById('perfil-overlay').classList.remove('perfil-overlay--visible');
+            document.body.classList.remove('perfil-no-scroll');
+        }
+
+        // ── Copia o avatar da topbar para o preview do painel ─────
+        function perfilSincronizarAvatar() {
+            var topbarImg = document.querySelector('.topbar-avatar-principal');
+            var preview   = document.getElementById('perfilAvatarPreview');
+            if (!preview) return;
+            if (topbarImg && topbarImg.src) {
+                preview.src = topbarImg.src;
+            } else {
+                // Fallback: avatar padrão do Manhattan
+                preview.src = '/javax.faces.resource/images/avatar.png?ln=manhattan-layout';
+            }
+        }
+
+        // ── Preview instantâneo ao escolher arquivo ───────────────
+        function perfilHandleFoto(input) {
+            if (!input.files || !input.files.length) return;
+            var file = input.files[0];
+
+            if (file.size > 3 * 1024 * 1024) {
+                perfilToast('Imagem muito grande. Use uma foto com no máximo 3 MB.', 'error');
+                input.value = '';
+                return;
+            }
+            if (!file.type.startsWith('image/')) {
+                perfilToast('Formato inválido. Use PNG, JPG ou WEBP.', 'error');
+                input.value = '';
+                return;
+            }
+
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                var base64 = e.target.result;
+                // Atualiza preview
+                var preview = document.getElementById('perfilAvatarPreview');
+                if (preview) preview.src = base64;
+                // Grava no campo hidden para o servidor receber
+                var hidden = document.getElementById('formPerfil:fotoBase64');
+                if (hidden) hidden.value = base64;
+            };
+            reader.readAsDataURL(file);
+        }
+
+        // ── Contador de caracteres da bio ─────────────────────────
+        function perfilContador(textarea) {
+            var counter = document.getElementById('perfil-bio-count');
+            if (!counter) return;
+            var n = textarea.value ? textarea.value.length : 0;
+            counter.textContent = n + ' / 200';
+            counter.style.color = n > 180 ? '#ef4444' : '';
+        }
+
+        // ── Estado de loading no botão Salvar ─────────────────────
+        function perfilBtnLoading(on) {
+            var btn = document.querySelector('#formPerfil\\:btnSalvarPerfil');
+            if (!btn) return;
+            if (on) {
+                btn.classList.add('perfil-btn-saving');
+                btn.disabled = true;
+            } else {
+                btn.classList.remove('perfil-btn-saving');
+                btn.disabled = false;
+            }
+        }
+
+        // ── Callback após submit Ajax ─────────────────────────────
+        function perfilOnSalvo(xhr, status, args) {
+            perfilBtnLoading(false);
+
+            // Aguarda o Growl renderizar para verificar erros
+            setTimeout(function() {
+                var erros = document.querySelectorAll(
+                    '.ui-growl-item-container.ui-growl-message-error,' +
+                    '.ui-growl-message-error');
+                if (erros.length > 0) return; // tem erro — mantém o painel aberto
+
+                // Atualiza avatar da topbar com a foto nova (se houver)
+                var preview = document.getElementById('perfilAvatarPreview');
+                if (preview && preview.src && preview.src.indexOf('data:image') === 0) {
+                    document.querySelectorAll('.topbar-avatar-src').forEach(function(img) {
+                        img.src = preview.src;
+                    });
+                }
+
+                // Fecha o painel suavemente
+                setTimeout(fecharPerfilPanel, 700);
+            }, 350);
+        }
+
+        // ── Toast leve para erros de validação client-side ────────
+        function perfilToast(msg, tipo) {
+            var el = document.createElement('div');
+            el.className = 'perfil-toast perfil-toast--' + (tipo || 'info');
+            el.textContent = msg;
+            document.body.appendChild(el);
+            requestAnimationFrame(function() {
+                el.classList.add('perfil-toast--visible');
+            });
+            setTimeout(function() {
+                el.classList.remove('perfil-toast--visible');
+                setTimeout(function() { if (el.parentNode) el.parentNode.removeChild(el); }, 300);
+            }, 3800);
+        }
+
+        // ── Fechar com tecla ESC ──────────────────────────────────
+        document.addEventListener('keydown', function(e) {
+            if (e.key !== 'Escape') return;
+            var panel = document.getElementById('perfil-panel');
+            if (panel && panel.classList.contains('perfil-panel--open')) {
+                fecharPerfilPanel();
+            }
+        });
+
+        //]]>
+    </h:outputScript>
+
+</ui:composition>

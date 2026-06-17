@@ -1,0 +1,1061 @@
+/* ================================================================
+   GameLog - Tema Global Fase 3
+   Paleta: Preto #0f0f1e | Roxo #7c3aed | Azul #2563eb | Verde #10b981
+   ================================================================ */
+
+/* ---- Variaveis ---- */
+:root {
+    --gl-bg:          #0f0f1e;
+    --gl-bg-card:     #16162a;
+    --gl-bg-input:    #1e1e35;
+    --gl-border:      rgba(139, 92, 246, 0.18);
+    --gl-purple:      #7c3aed;
+    --gl-purple-light:#a78bfa;
+    --gl-blue:        #2563eb;
+    --gl-green:       #10b981;
+    --gl-red:         #ef4444;
+    --gl-text:        #e2e8f0;
+    --gl-text-muted:  rgba(148, 163, 184, 0.65);
+    --gl-gradient:    linear-gradient(135deg, #7c3aed, #2563eb);
+    --gl-radius:      10px;
+    --gl-shadow:      0 4px 24px rgba(0,0,0,0.45);
+}
+
+/* ================================================================
+   LAYOUT GERAL
+   ================================================================ */
+
+body,
+.layout-wrapper {
+    background: var(--gl-bg) !important;
+    color: var(--gl-text) !important;
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif !important;
+}
+
+.layout-content {
+    background: var(--gl-bg) !important;
+    padding: 24px !important;
+}
+
+/* ================================================================
+   TOPBAR
+   ================================================================ */
+
+.layout-topbar {
+    background: #12122080 !important;
+    backdrop-filter: blur(12px) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.4) !important;
+}
+
+.layout-topbar .topbar-search input {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+}
+
+.layout-topbar .topbar-search .pi {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-topbar .topbar-item-name,
+.layout-topbar .profile-name {
+    color: var(--gl-text) !important;
+}
+
+.layout-topbar .topbar-menu > li > a > i {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-topbar .topbar-badge {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.menu-btn i,
+.topbar-menu-btn i,
+.rightpanel-btn i {
+    color: var(--gl-text-muted) !important;
+}
+
+/* ================================================================
+   SIDEBAR
+   ================================================================ */
+
+.layout-sidebar {
+    background: linear-gradient(180deg, #0d0d1f 0%, #12122a 100%) !important;
+    border-right: 1px solid var(--gl-border) !important;
+    box-shadow: 2px 0 20px rgba(0,0,0,0.4) !important;
+}
+
+.layout-sidebar-logo {
+    border-bottom: 1px solid var(--gl-border) !important;
+}
+
+.layout-sidebar-anchor i {
+    color: var(--gl-purple-light) !important;
+}
+
+/* Items do menu */
+.layout-menu li a,
+.layout-menu li .p-menuitem-link {
+    color: var(--gl-text-muted) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s ease !important;
+    margin: 2px 8px !important;
+}
+
+.layout-menu li a:hover,
+.layout-menu li .p-menuitem-link:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+    transform: translateX(3px) !important;
+}
+
+.layout-menu li a .p-menuitem-icon,
+.layout-menu li .p-menuitem-link .p-menuitem-icon {
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-menu li a:hover .p-menuitem-icon,
+.layout-menu li .p-menuitem-link:hover .p-menuitem-icon {
+    color: var(--gl-purple-light) !important;
+}
+
+/* Item ativo */
+.layout-menu li.active-menuitem > a,
+.layout-menu li.active-menuitem > .p-menuitem-link {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+    border-left: 3px solid var(--gl-purple) !important;
+}
+
+.layout-menu li.active-menuitem > a .p-menuitem-icon {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   FIELDSET (paineis de filtro e tabela)
+   ================================================================ */
+
+.ui-fieldset,
+.ui-widget-content {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: var(--gl-radius) !important;
+    box-shadow: var(--gl-shadow) !important;
+}
+
+.ui-fieldset-legend,
+.ui-fieldset .ui-fieldset-legend {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-purple-light) !important;
+    font-weight: 600 !important;
+    border-radius: 8px !important;
+    padding: 6px 14px !important;
+}
+
+/* ================================================================
+   INPUTS, SELECTS, TEXTAREAS
+   ================================================================ */
+
+.ui-inputtext,
+.ui-inputfield,
+.ui-selectonemenu,
+.ui-inputnumber input,
+.ui-inputtextarea,
+input.ui-inputfield,
+.ui-datepicker-trigger {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s ease !important;
+}
+
+.ui-inputtext:focus,
+.ui-inputfield:focus,
+.ui-inputnumber input:focus,
+.ui-inputtextarea:focus {
+    border-color: var(--gl-purple) !important;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.15) !important;
+    outline: none !important;
+}
+
+.ui-inputtext::placeholder,
+input::placeholder {
+    color: var(--gl-text-muted) !important;
+}
+
+/* Dropdown */
+.ui-selectonemenu .ui-selectonemenu-trigger {
+    background: var(--gl-bg-input) !important;
+    border-left: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+}
+
+.ui-selectonemenu-panel,
+.ui-selectonemenu-items-wrapper {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-selectonemenu-item {
+    color: var(--gl-text) !important;
+}
+
+.ui-selectonemenu-item:hover,
+.ui-selectonemenu-item.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+/* Labels */
+.ui-outputlabel,
+label {
+    color: var(--gl-text-muted) !important;
+    font-size: 13px !important;
+}
+
+/* ================================================================
+   BOTOES
+   ================================================================ */
+
+.ui-button {
+    background: var(--gl-gradient) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-weight: 600 !important;
+    transition: all 0.25s ease !important;
+    box-shadow: 0 2px 12px rgba(124, 58, 237, 0.3) !important;
+}
+
+.ui-button:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 6px 20px rgba(124, 58, 237, 0.45) !important;
+    filter: brightness(1.1) !important;
+}
+
+.ui-button:active {
+    transform: translateY(0) !important;
+}
+
+/* Botao secundario (Limpar, Cancelar) */
+.ui-button.p-button-secondary,
+.ui-button.ui-button-secondary {
+    background: rgba(255,255,255,0.06) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+    box-shadow: none !important;
+}
+
+.ui-button.p-button-secondary:hover,
+.ui-button.ui-button-secondary:hover {
+    background: rgba(255,255,255,0.1) !important;
+    color: var(--gl-text) !important;
+    box-shadow: none !important;
+    filter: none !important;
+}
+
+/* Botao danger (Excluir) */
+.ui-button.p-button-danger,
+.ui-button.ui-button-danger {
+    background: linear-gradient(135deg, #dc2626, #b91c1c) !important;
+    box-shadow: 0 2px 12px rgba(239, 68, 68, 0.3) !important;
+}
+
+/* ================================================================
+   DATATABLE
+   ================================================================ */
+
+.ui-datatable {
+    background: var(--gl-bg-card) !important;
+    border: none !important;
+    border-radius: var(--gl-radius) !important;
+    overflow: hidden !important;
+}
+
+.ui-datatable .ui-datatable-header {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+}
+
+/* Header das colunas */
+.ui-datatable thead th,
+.ui-datatable .ui-column-title {
+    background: #1a1a30 !important;
+    color: var(--gl-purple-light) !important;
+    border-bottom: 2px solid var(--gl-border) !important;
+    border-right: none !important;
+    font-weight: 600 !important;
+    font-size: 13px !important;
+    letter-spacing: 0.3px !important;
+    padding: 14px 12px !important;
+    text-transform: uppercase !important;
+}
+
+/* Linhas */
+.ui-datatable tbody tr {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.08) !important;
+    transition: background 0.2s ease !important;
+}
+
+.ui-datatable tbody tr:hover {
+    background: rgba(124, 58, 237, 0.08) !important;
+}
+
+.ui-datatable tbody tr td {
+    color: var(--gl-text) !important;
+    border: none !important;
+    border-bottom: 1px solid rgba(139, 92, 246, 0.07) !important;
+    padding: 13px 12px !important;
+    font-size: 14px !important;
+}
+
+/* Linha selecionada */
+.ui-datatable tbody tr.ui-state-highlight td,
+.ui-datatable tbody tr.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.18) !important;
+    color: var(--gl-purple-light) !important;
+    border-left: 3px solid var(--gl-purple) !important;
+}
+
+/* Footer da tabela (botoes) */
+.ui-datatable tfoot td,
+.ui-datatable .ui-datatable-footer {
+    background: #1a1a30 !important;
+    border-top: 1px solid var(--gl-border) !important;
+    padding: 12px !important;
+}
+
+/* Paginacao */
+.ui-paginator {
+    background: var(--gl-bg-card) !important;
+    border: none !important;
+    border-top: 1px solid var(--gl-border) !important;
+    padding: 10px !important;
+}
+
+.ui-paginator .ui-paginator-page,
+.ui-paginator .ui-paginator-first,
+.ui-paginator .ui-paginator-prev,
+.ui-paginator .ui-paginator-next,
+.ui-paginator .ui-paginator-last {
+    color: var(--gl-text-muted) !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+}
+
+.ui-paginator .ui-paginator-page.ui-state-active {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.ui-paginator .ui-paginator-page:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+.ui-paginator .ui-paginator-rpp-options {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 6px !important;
+}
+
+/* ================================================================
+   DIALOGS
+   ================================================================ */
+
+.ui-dialog {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 14px !important;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.7) !important;
+    overflow: hidden !important;
+}
+
+.ui-dialog .ui-dialog-titlebar {
+    background: linear-gradient(135deg, #1a0a2e, #0f172a) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    font-weight: 700 !important;
+    font-size: 16px !important;
+    padding: 16px 20px !important;
+    border-radius: 14px 14px 0 0 !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close {
+    color: var(--gl-text-muted) !important;
+    transition: color 0.2s !important;
+}
+
+.ui-dialog .ui-dialog-titlebar-close:hover {
+    color: var(--gl-red) !important;
+}
+
+.ui-dialog .ui-dialog-content {
+    background: var(--gl-bg-card) !important;
+    color: var(--gl-text) !important;
+    padding: 24px 28px !important;
+}
+
+/* Overlay do dialog */
+.ui-widget-overlay {
+    background: rgba(0, 0, 0, 0.7) !important;
+    backdrop-filter: blur(4px) !important;
+}
+
+/* ================================================================
+   PANELGRID dentro dos dialogs
+   ================================================================ */
+
+.ui-panelgrid td {
+    padding: 8px 10px !important;
+    border: none !important;
+    background: transparent !important;
+    color: var(--gl-text) !important;
+    vertical-align: middle !important;
+}
+
+/* ================================================================
+   GROWL / MENSAGENS
+   ================================================================ */
+
+.ui-growl-item-container.ui-state-highlight.ui-growl-message-info {
+    background: rgba(16, 185, 129, 0.15) !important;
+    border: 1px solid rgba(16, 185, 129, 0.35) !important;
+    border-radius: 10px !important;
+}
+
+.ui-growl-item-container.ui-state-highlight.ui-growl-message-error {
+    background: rgba(239, 68, 68, 0.15) !important;
+    border: 1px solid rgba(239, 68, 68, 0.35) !important;
+    border-radius: 10px !important;
+}
+
+.ui-growl-message-info .ui-growl-message p,
+.ui-growl-message-info .ui-growl-title {
+    color: var(--gl-green) !important;
+}
+
+.ui-growl-message-error .ui-growl-message p,
+.ui-growl-message-error .ui-growl-title {
+    color: #fca5a5 !important;
+}
+
+/* ================================================================
+   CONFIRM DIALOG
+   ================================================================ */
+
+.ui-confirmdialog {
+    background: var(--gl-bg-card) !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 14px !important;
+}
+
+.ui-confirmdialog .ui-dialog-titlebar {
+    background: linear-gradient(135deg, #1a0a2e, #0f172a) !important;
+    color: var(--gl-text) !important;
+}
+
+.ui-confirmdialog .ui-dialog-content {
+    background: var(--gl-bg-card) !important;
+    color: var(--gl-text) !important;
+}
+
+.ui-confirmdialog .ui-confirmdialog-message {
+    color: var(--gl-text) !important;
+}
+
+/* ================================================================
+   AUTOCOMPLETE
+   ================================================================ */
+
+.ui-autocomplete-panel {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-autocomplete-item {
+    color: var(--gl-text) !important;
+    padding: 10px 14px !important;
+}
+
+.ui-autocomplete-item:hover,
+.ui-autocomplete-item.ui-state-highlight {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   DATEPICKER
+   ================================================================ */
+
+.ui-datepicker {
+    background: #1a1a30 !important;
+    border: 1px solid var(--gl-border) !important;
+    border-radius: 10px !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.5) !important;
+}
+
+.ui-datepicker .ui-datepicker-header {
+    background: #12122a !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 10px 10px 0 0 !important;
+}
+
+.ui-datepicker .ui-datepicker-title {
+    color: var(--gl-purple-light) !important;
+    font-weight: 700 !important;
+}
+
+.ui-datepicker table th {
+    color: var(--gl-text-muted) !important;
+    font-weight: 600 !important;
+}
+
+.ui-datepicker table td a,
+.ui-datepicker table td span {
+    color: var(--gl-text) !important;
+    border-radius: 6px !important;
+    transition: all 0.2s !important;
+}
+
+.ui-datepicker table td a:hover {
+    background: rgba(124, 58, 237, 0.2) !important;
+    color: var(--gl-purple-light) !important;
+}
+
+.ui-datepicker table td.ui-datepicker-today a {
+    background: rgba(124, 58, 237, 0.15) !important;
+    color: var(--gl-purple-light) !important;
+    font-weight: 700 !important;
+}
+
+.ui-datepicker table td a.ui-state-active,
+.ui-datepicker table td.ui-state-highlight a {
+    background: var(--gl-purple) !important;
+    color: #fff !important;
+}
+
+.ui-datepicker .ui-datepicker-prev,
+.ui-datepicker .ui-datepicker-next {
+    color: var(--gl-text-muted) !important;
+}
+
+.ui-datepicker .ui-datepicker-prev:hover,
+.ui-datepicker .ui-datepicker-next:hover {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   SELECT BOOLEAN BUTTON (devolvido?)
+   ================================================================ */
+
+.ui-selectbooleanbutton {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+    border-radius: 8px !important;
+    transition: all 0.25s !important;
+}
+
+.ui-selectbooleanbutton.ui-state-active {
+    background: rgba(16, 185, 129, 0.2) !important;
+    border-color: var(--gl-green) !important;
+    color: var(--gl-green) !important;
+}
+
+/* ================================================================
+   SCROLLBAR
+   ================================================================ */
+
+::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--gl-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.4);
+    border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: rgba(124, 58, 237, 0.7);
+}
+
+/* ================================================================
+   FOOTER
+   ================================================================ */
+
+.layout-footer {
+    background: #12122a !important;
+    border-top: 1px solid var(--gl-border) !important;
+    color: var(--gl-text-muted) !important;
+}
+
+.layout-footer a {
+    color: var(--gl-purple-light) !important;
+}
+
+/* ================================================================
+   AJAXSTATUS SPINNER
+   ================================================================ */
+
+.layout-ajax-loader-icon {
+    color: var(--gl-purple) !important;
+}
+
+/* ================================================================
+   INPUT NUMBER - correcao do fundo
+   ================================================================ */
+
+.ui-inputnumber {
+    background: transparent !important;
+}
+
+.ui-inputnumber .ui-inputnumber-input {
+    background: var(--gl-bg-input) !important;
+    border: 1px solid var(--gl-border) !important;
+    color: var(--gl-text) !important;
+    border-radius: 8px !important;
+}
+
+/* ================================================================
+   CORRECOES MANHATTAN ESPECIFICAS
+   ================================================================ */
+
+/* Remove fundo branco de varios widgets */
+.ui-widget,
+.ui-widget-content,
+.ui-widget-header {
+    border-color: var(--gl-border) !important;
+}
+
+/* Força cor do texto em todos os spans gerados pelo PF */
+.ui-widget span,
+.ui-widget label {
+    color: var(--gl-text) !important;
+}
+
+/* Tabs e outros paineis */
+.ui-tabview .ui-tabview-nav {
+    background: var(--gl-bg-card) !important;
+    border-bottom: 1px solid var(--gl-border) !important;
+}
+
+.ui-tabview .ui-tabview-panels {
+    background: var(--gl-bg-card) !important;
+}
+
+/* Right panel */
+.layout-rightpanel {
+    background: #12122a !important;
+    border-left: 1px solid var(--gl-border) !important;
+}
+
+
+/* ================================================================
+   TOPBAR — avatar e link de perfil
+   ================================================================ */
+
+.topbar-profile-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 5px 10px !important;
+    border-radius: 8px !important;
+    cursor: pointer !important;
+    text-decoration: none !important;
+    transition: background 0.2s ease !important;
+}
+.topbar-profile-link:hover {
+    background: rgba(124, 58, 237, 0.15) !important;
+}
+.topbar-avatar-wrap {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+.topbar-avatar-img {
+    width: 32px !important;
+    height: 32px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 2px solid var(--gl-purple) !important;
+    display: block !important;
+}
+.topbar-nome-exibicao {
+    font-size: 0.88rem !important;
+    font-weight: 500 !important;
+    color: var(--gl-text) !important;
+    white-space: nowrap !important;
+    transition: color 0.2s !important;
+}
+.topbar-edit-hint {
+    font-size: 0.65rem !important;
+    color: var(--gl-purple-light) !important;
+    opacity: 0 !important;
+    transition: opacity 0.2s !important;
+}
+.topbar-profile-link:hover .topbar-edit-hint {
+    opacity: 1 !important;
+}
+.topbar-logout-link {
+    display: flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    padding: 8px 14px !important;
+    color: var(--gl-text-muted) !important;
+    text-decoration: none !important;
+    font-size: 0.88rem !important;
+    transition: color 0.2s !important;
+}
+.topbar-logout-link:hover {
+    color: var(--gl-red) !important;
+}
+
+/* ================================================================
+   PAINEL DE PERFIL — Overlay
+   ================================================================ */
+
+.perfil-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    z-index: 9998;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.28s ease;
+}
+.perfil-overlay--visible {
+    opacity: 1 !important;
+    pointer-events: all !important;
+}
+body.perfil-no-scroll {
+    overflow: hidden !important;
+}
+
+/* ================================================================
+   PAINEL DE PERFIL — Drawer lateral direito
+   ================================================================ */
+
+.perfil-panel {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: 100dvh;
+    width: 380px;
+    max-width: 95vw;
+    background: var(--gl-bg-card);
+    border-left: 1px solid var(--gl-border);
+    box-shadow: -12px 0 48px rgba(0, 0, 0, 0.65);
+    z-index: 9999;
+    display: flex;
+    flex-direction: column;
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.4, 0, 0.2, 1);
+    overflow: hidden;
+}
+.perfil-panel--open {
+    transform: translateX(0) !important;
+}
+
+/* ── Cabeçalho ── */
+.perfil-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 18px 20px;
+    border-bottom: 1px solid var(--gl-border);
+    background: linear-gradient(135deg,
+        rgba(124, 58, 237, 0.10) 0%,
+        rgba(37, 99, 235, 0.06) 100%);
+    flex-shrink: 0;
+}
+.perfil-header-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--gl-text);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    letter-spacing: 0.01em;
+}
+.perfil-header-title .pi {
+    color: var(--gl-purple-light);
+    font-size: 1.05rem;
+}
+.perfil-close-btn {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: var(--gl-text-muted);
+    width: 34px;
+    height: 34px;
+    border-radius: 7px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.9rem;
+    transition: background 0.18s, color 0.18s;
+}
+.perfil-close-btn:hover {
+    background: rgba(239, 68, 68, 0.14);
+    color: var(--gl-red);
+}
+
+/* ── Corpo com scroll ── */
+.perfil-body {
+    flex: 1;
+    overflow-y: auto;
+    padding: 26px 22px 32px;
+    scrollbar-width: thin;
+    scrollbar-color: rgba(124, 58, 237, 0.4) transparent;
+}
+.perfil-body::-webkit-scrollbar { width: 4px; }
+.perfil-body::-webkit-scrollbar-track { background: transparent; }
+.perfil-body::-webkit-scrollbar-thumb {
+    background: rgba(124, 58, 237, 0.4);
+    border-radius: 4px;
+}
+
+/* ================================================================
+   SEÇÃO AVATAR
+   ================================================================ */
+
+.perfil-avatar-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 30px;
+    padding-bottom: 26px;
+    border-bottom: 1px solid var(--gl-border);
+}
+.perfil-avatar-ring {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    cursor: pointer;
+    flex-shrink: 0;
+}
+.perfil-avatar-ring:hover .perfil-avatar-overlay {
+    opacity: 1;
+}
+.perfil-avatar-img {
+    width: 100px !important;
+    height: 100px !important;
+    border-radius: 50% !important;
+    object-fit: cover !important;
+    border: 3px solid var(--gl-purple) !important;
+    box-shadow: 0 0 0 4px rgba(124, 58, 237, 0.18),
+                0 6px 24px rgba(0, 0, 0, 0.5) !important;
+    display: block !important;
+    transition: filter 0.2s !important;
+}
+.perfil-avatar-ring:hover .perfil-avatar-img {
+    filter: brightness(0.65) !important;
+}
+.perfil-avatar-overlay {
+    position: absolute;
+    inset: 0;
+    border-radius: 50%;
+    background: rgba(124, 58, 237, 0.30);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+.perfil-avatar-overlay .pi {
+    font-size: 1.6rem;
+    color: #fff;
+    filter: drop-shadow(0 2px 4px rgba(0,0,0,0.4));
+}
+.perfil-avatar-hint {
+    font-size: 0.74rem;
+    color: var(--gl-text-muted);
+    text-align: center;
+}
+
+/* ================================================================
+   CAMPOS
+   ================================================================ */
+
+.perfil-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 22px;
+}
+.perfil-label {
+    font-size: 0.78rem;
+    font-weight: 700;
+    color: var(--gl-purple-light);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+.perfil-label .pi { font-size: 0.82rem; }
+
+/* Inputs — aplica nos wrappers do PrimeFaces */
+.perfil-input,
+.perfil-input.ui-inputtext,
+.perfil-input .ui-inputfield {
+    width: 100% !important;
+    background: var(--gl-bg-input) !important;
+    border: 1.5px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    color: var(--gl-text) !important;
+    padding: 10px 13px !important;
+    font-size: 0.91rem !important;
+    font-family: inherit !important;
+    box-sizing: border-box !important;
+    transition: border-color 0.18s, box-shadow 0.18s !important;
+    outline: none !important;
+}
+.perfil-input:focus,
+.perfil-input.ui-inputtext:focus,
+.perfil-input .ui-inputfield:focus,
+.perfil-input.ui-state-focus,
+.perfil-input .ui-state-focus {
+    border-color: var(--gl-purple) !important;
+    box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.18) !important;
+}
+.perfil-input::placeholder { color: var(--gl-text-muted) !important; }
+
+.perfil-textarea,
+.perfil-textarea.ui-inputtextarea,
+.perfil-textarea .ui-inputfield {
+    resize: none !important;
+    min-height: 96px !important;
+    line-height: 1.55 !important;
+}
+
+.perfil-hint {
+    font-size: 0.72rem;
+    color: var(--gl-text-muted);
+    line-height: 1.4;
+}
+.perfil-counter {
+    align-self: flex-end;
+    transition: color 0.2s;
+}
+
+/* ================================================================
+   BOTÕES DE AÇÃO
+   ================================================================ */
+
+.perfil-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 30px;
+    padding-top: 20px;
+    border-top: 1px solid var(--gl-border);
+}
+
+/* Botão Salvar — PrimeFaces commandButton */
+.perfil-btn-save.ui-button,
+.perfil-btn-save {
+    flex: 1 !important;
+    background: var(--gl-gradient) !important;
+    border: none !important;
+    border-radius: 8px !important;
+    color: #fff !important;
+    font-weight: 700 !important;
+    font-size: 0.9rem !important;
+    padding: 10px 18px !important;
+    cursor: pointer !important;
+    transition: opacity 0.18s, transform 0.12s !important;
+    position: relative !important;
+    overflow: hidden !important;
+}
+.perfil-btn-save.ui-button:hover,
+.perfil-btn-save:hover {
+    opacity: 0.88 !important;
+    transform: translateY(-1px) !important;
+}
+.perfil-btn-save.perfil-btn-saving,
+.perfil-btn-save.ui-button.perfil-btn-saving {
+    opacity: 0.65 !important;
+    cursor: not-allowed !important;
+    transform: none !important;
+}
+
+/* Botão Cancelar — <button> nativo */
+.perfil-btn-cancel {
+    background: transparent !important;
+    border: 1.5px solid var(--gl-border) !important;
+    border-radius: 8px !important;
+    color: var(--gl-text-muted) !important;
+    font-size: 0.88rem !important;
+    padding: 10px 16px !important;
+    cursor: pointer !important;
+    display: flex !important;
+    align-items: center !important;
+    gap: 6px !important;
+    transition: border-color 0.18s, color 0.18s !important;
+    font-family: inherit !important;
+    white-space: nowrap !important;
+}
+.perfil-btn-cancel:hover {
+    border-color: var(--gl-red) !important;
+    color: var(--gl-red) !important;
+}
+
+/* ================================================================
+   TOAST CLIENT-SIDE (erros de validação JS)
+   ================================================================ */
+
+.perfil-toast {
+    position: fixed;
+    bottom: 28px;
+    left: 50%;
+    transform: translateX(-50%) translateY(12px);
+    background: var(--gl-bg-card);
+    border: 1px solid var(--gl-border);
+    border-radius: 8px;
+    padding: 11px 20px;
+    font-size: 0.88rem;
+    color: var(--gl-text);
+    z-index: 10000;
+    opacity: 0;
+    transition: opacity 0.22s, transform 0.22s;
+    pointer-events: none;
+    box-shadow: var(--gl-shadow);
+    max-width: 88vw;
+    text-align: center;
+}
+.perfil-toast--visible {
+    opacity: 1 !important;
+    transform: translateX(-50%) translateY(0) !important;
+}
+.perfil-toast--error {
+    border-color: rgba(239, 68, 68, 0.45) !important;
+    color: var(--gl-red) !important;
+}
+.perfil-toast--info {
+    border-color: rgba(16, 185, 129, 0.45) !important;
+    color: var(--gl-green) !important;
+}

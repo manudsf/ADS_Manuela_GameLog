@@ -1,0 +1,203 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title"><h:outputText value="GameLog - Wishlist"/></ui:define>
+
+    <ui:define name="content">
+        <h:form id="frmList">
+            <h:panelGroup id="pngList">
+                <p:growl id="growl" showDetail="true"/>
+                <p:fieldset legend="Lista de Desejos (Wishlist)" toggleable="true">
+                    <p:dataTable id="datalist" value="#{wishlistController.wishlistList}" var="item"
+                                 selectionMode="single" selection="#{wishlistController.selected}"
+                                 widgetVar="datalistWishlistWidgetVar"
+                                 rowKey="#{item.id}"
+                                 paginator="true" rows="10" rowsPerPageTemplate="5,10,25,50"
+                                 emptyMessage="Nenhum item na wishlist...">
+
+                        <p:ajax event="rowSelect"   update="btnEdit btnDelete btnView"/>
+                        <p:ajax event="rowUnselect" update="btnEdit btnDelete btnView"/>
+
+                        <p:column width="4%" sortBy="#{item.id}">
+                            <f:facet name="header"><h:outputText value="ID"/></f:facet>
+                            <h:outputText value="#{item.id}"/>
+                        </p:column>
+
+                        <p:column width="25%" sortBy="#{item.titulo}" filterBy="#{item.titulo}" filterMatchMode="contains">
+                            <f:facet name="header"><h:outputText value="Titulo"/></f:facet>
+                            <h:outputText value="#{item.titulo}"/>
+                        </p:column>
+
+                        <p:column width="15%" sortBy="#{item.plataforma}" filterBy="#{item.plataforma}">
+                            <f:facet name="header"><h:outputText value="Plataforma"/></f:facet>
+                            <h:outputText value="#{item.plataforma}"/>
+                        </p:column>
+
+                        <p:column width="10%" sortBy="#{item.prioridade}">
+                            <f:facet name="header"><h:outputText value="Prioridade"/></f:facet>
+                            <h:outputText value="#{item.prioridade}"/>
+                        </p:column>
+
+                        <p:column width="11%" sortBy="#{item.datahorareg}">
+                            <f:facet name="header"><h:outputText value="Cadastro"/></f:facet>
+                            <h:outputText value="#{item.datahorareg}">
+                                <f:convertDateTime pattern="dd/MM/yyyy" timeZone="America/Sao_Paulo"/>
+                            </h:outputText>
+                        </p:column>
+
+                        <p:column width="25%">
+                            <f:facet name="header"><h:outputText value="Observacao"/></f:facet>
+                            <h:outputText value="#{item.observacao}"/>
+                        </p:column>
+
+                        <f:facet name="footer">
+                            <p:commandButton id="btnCreate" value="Adicionar a Wishlist" icon="pi pi-heart"
+                                             actionListener="#{wishlistController.prepareAdicionar()}"
+                                             update=":CreateForm" onclick="PF('dlgCreate').show()"/>
+
+                            <p:commandButton id="btnEdit" icon="pi pi-user-edit" value="Editar"
+                                             update="formEdit" oncomplete="PF('dlgEdit').show()"
+                                             disabled="#{empty wishlistController.selected}"/>
+
+                            <p:commandButton id="btnDelete" icon="pi pi-trash" value="Excluir"
+                                             actionListener="#{wishlistController.deletarWishlist()}" update="frmList"
+                                             disabled="#{empty wishlistController.selected}">
+                                <p:confirm header="Confirmar Exclusao" message="Confirma a exclusao deste item?" icon="ui-icon-alert"/>
+                            </p:commandButton>
+
+                            <p:commandButton id="btnView" icon="pi pi-eye" value="Detalhes"
+                                             update="formView" oncomplete="PF('dlgView').show()"
+                                             disabled="#{empty wishlistController.selected}"/>
+                        </f:facet>
+                    </p:dataTable>
+                </p:fieldset>
+
+                <p:confirmDialog global="true" showEffect="fade" hideEffect="fade">
+                    <p:commandButton value="Sim" type="button" styleClass="ui-confirmdialog-yes" icon="fa fa-check"/>
+                    <p:commandButton value="Nao" type="button" styleClass="ui-confirmdialog-no" icon="fa fa-times"/>
+                </p:confirmDialog>
+            </h:panelGroup>
+        </h:form>
+
+        <!-- Dialog: Adicionar -->
+        <p:dialog header="Adicionar a Wishlist" widgetVar="dlgCreate" height="440" width="640"
+                  showEffect="fade" modal="true" resizable="false">
+            <h:form id="CreateForm">
+                <p:growl id="growlCreate" showDetail="true"/>
+                <h:panelGrid id="pngCadastro" columns="2" cellpadding="8">
+
+                    <p:outputLabel value="Titulo: *" for="iptTitulo"/>
+                    <p:inputText id="iptTitulo" style="width:280px" required="true"
+                                 requiredMessage="O titulo e obrigatorio"
+                                 value="#{wishlistController.wishlist.titulo}" maxlength="200"/>
+
+                    <p:outputLabel value="Plataforma: *" for="somPlataforma"/>
+                    <p:selectOneMenu id="somPlataforma" value="#{wishlistController.wishlist.plataforma}"
+                                     required="true" requiredMessage="A plataforma e obrigatoria" style="width:280px">
+                        <f:selectItem itemLabel="Selecione a plataforma..." itemValue=""/>
+                        <f:selectItems value="#{wishlistController.plataformas}"
+                                       var="plt" itemValue="#{plt.descricao}" itemLabel="#{plt.descricao}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Prioridade: *" for="somPrioridade"/>
+                    <p:selectOneMenu id="somPrioridade" value="#{wishlistController.wishlist.prioridade}"
+                                     required="true" requiredMessage="A prioridade e obrigatoria" style="width:280px">
+                        <f:selectItem itemLabel="Selecione a prioridade..." itemValue=""/>
+                        <f:selectItems value="#{wishlistController.prioridades}"
+                                       var="pri" itemValue="#{pri.descricao}" itemLabel="#{pri.descricao}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Observacao:" for="iptObservacao"/>
+                    <p:inputTextarea id="iptObservacao" rows="3" cols="30" autoResize="false"
+                                     value="#{wishlistController.wishlist.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton actionListener="#{wishlistController.adicionarWishlist()}"
+                                     icon="pi pi-save" value="Adicionar"
+                                     update=":frmList @form"
+                                     oncomplete="if(!args.validationFailed) PF('dlgCreate').hide()"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgCreate').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Editar -->
+        <p:dialog header="Editar Wishlist" widgetVar="dlgEdit" height="460" width="640"
+                  showEffect="fade" modal="true" resizable="false">
+            <h:form id="formEdit">
+                <p:growl id="growlEdit" showDetail="true"/>
+                <h:panelGrid id="pngEdicao" columns="2" cellpadding="8" rendered="#{wishlistController.selected != null}">
+
+                    <p:outputLabel value="Titulo: *" for="iptTituloEdit"/>
+                    <p:inputText id="iptTituloEdit" style="width:280px" required="true"
+                                 requiredMessage="O titulo e obrigatorio"
+                                 value="#{wishlistController.selected.titulo}" maxlength="200"/>
+
+                    <p:outputLabel value="Plataforma: *" for="somPlataformaEdit"/>
+                    <p:selectOneMenu id="somPlataformaEdit" value="#{wishlistController.selected.plataforma}"
+                                     required="true" requiredMessage="A plataforma e obrigatoria" style="width:280px">
+                        <f:selectItem itemLabel="Selecione a plataforma..." itemValue=""/>
+                        <f:selectItems value="#{wishlistController.plataformas}"
+                                       var="plt" itemValue="#{plt.descricao}" itemLabel="#{plt.descricao}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Prioridade: *" for="somPrioridadeEdit"/>
+                    <p:selectOneMenu id="somPrioridadeEdit" value="#{wishlistController.selected.prioridade}"
+                                     required="true" requiredMessage="A prioridade e obrigatoria" style="width:280px">
+                        <f:selectItem itemLabel="Selecione a prioridade..." itemValue=""/>
+                        <f:selectItems value="#{wishlistController.prioridades}"
+                                       var="pri" itemValue="#{pri.descricao}" itemLabel="#{pri.descricao}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Observacao:" for="iptObservacaoEdit"/>
+                    <p:inputTextarea id="iptObservacaoEdit" rows="3" cols="30" autoResize="false"
+                                     value="#{wishlistController.selected.observacao}"/>
+                </h:panelGrid>
+
+                <div style="margin-top:10px">
+                    <p:commandButton id="btnSalvarEdicao" value="Salvar" icon="pi pi-save"
+                                     update="@form :frmList"
+                                     oncomplete="if(!args.validationFailed) PF('dlgEdit').hide()"
+                                     action="#{wishlistController.editarWishlist()}"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times" styleClass="p-button-secondary ml-2"
+                                     onclick="PF('dlgEdit').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+        <!-- Dialog: Visualizar -->
+        <p:dialog header="Detalhes da Wishlist" widgetVar="dlgView" height="320" width="500"
+                  showEffect="fade" modal="true" resizable="false">
+            <h:form id="formView">
+                <h:panelGrid id="pngView" columns="2" cellpadding="8" rendered="#{wishlistController.selected != null}">
+                    <p:outputLabel value="ID:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{wishlistController.selected.id}"/>
+
+                    <p:outputLabel value="Titulo:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{wishlistController.selected.titulo}"/>
+
+                    <p:outputLabel value="Plataforma:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{wishlistController.selected.plataforma}"/>
+
+                    <p:outputLabel value="Prioridade:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{wishlistController.selected.prioridade}"/>
+
+                    <p:outputLabel value="Cadastrado em:" style="font-weight:bold"/>
+                    <h:outputText value="#{wishlistController.selected.datahorareg}">
+                        <f:convertDateTime pattern="dd/MM/yyyy HH:mm" timeZone="America/Sao_Paulo"/>
+                    </h:outputText>
+
+                    <p:outputLabel value="Observacao:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{wishlistController.selected.observacao}"/>
+                </h:panelGrid>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

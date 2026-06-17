@@ -1,0 +1,367 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title"><h:outputText value="GameLog - Avaliacoes"/></ui:define>
+
+    <ui:define name="head">
+        <style>
+            /* =====================================================
+               TELA DE AVALIACOES
+               ===================================================== */
+
+            .av-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                gap: 20px;
+                padding: 4px 2px;
+            }
+
+            .av-card {
+                background: #16162a;
+                border: 1px solid rgba(139,92,246,0.15);
+                border-radius: 14px;
+                overflow: hidden;
+                transition: all 0.3s ease;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .av-card:hover {
+                border-color: rgba(124,58,237,0.35);
+                box-shadow: 0 8px 32px rgba(0,0,0,0.4);
+                transform: translateY(-2px);
+            }
+
+            /* Capa do jogo no card */
+            .av-card-cover {
+                width: 100%;
+                height: 160px;
+                object-fit: cover;
+                display: block;
+            }
+
+            .av-card-cover-placeholder {
+                width: 100%;
+                height: 160px;
+                background: linear-gradient(135deg, #1a0a2e, #0f172a);
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            .av-card-cover-placeholder i {
+                font-size: 2.5rem;
+                color: rgba(124,58,237,0.3);
+            }
+
+            .av-card-body {
+                padding: 18px 20px;
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                gap: 12px;
+            }
+
+            .av-card-header {
+                display: flex;
+                justify-content: space-between;
+                align-items: flex-start;
+                gap: 8px;
+            }
+
+            .av-card-title {
+                font-size: 1rem;
+                font-weight: 700;
+                color: #e2e8f0;
+                margin: 0;
+                line-height: 1.3;
+            }
+
+            /* Badges de status */
+            .gl-badge {
+                display: inline-block;
+                padding: 3px 10px;
+                border-radius: 20px;
+                font-size: 0.72rem;
+                font-weight: 600;
+                white-space: nowrap;
+                flex-shrink: 0;
+            }
+
+            .gl-badge-por-jogar  { background: rgba(148,163,184,0.12); color: #94a3b8; }
+            .gl-badge-a-jogar    { background: rgba(37,99,235,0.15);   color: #60a5fa; }
+            .gl-badge-concluido  { background: rgba(16,185,129,0.15);  color: #10b981; }
+            .gl-badge-platinado  { background: rgba(124,58,237,0.2);   color: #a78bfa; }
+
+            /* Estrelas */
+            .av-stars {
+                display: flex;
+                gap: 3px;
+                align-items: center;
+            }
+
+            .av-stars i {
+                font-size: 1rem;
+            }
+
+            .av-star-filled { color: #f59e0b; }
+            .av-star-empty  { color: rgba(148,163,184,0.2); }
+
+            .av-nota-text {
+                font-size: 0.82rem;
+                color: rgba(148,163,184,0.6);
+                margin-left: 6px;
+            }
+
+            /* Review (texto da critica) */
+            .av-review-text {
+                font-size: 0.88rem;
+                color: rgba(226,232,240,0.65);
+                line-height: 1.6;
+                font-style: italic;
+                border-left: 3px solid rgba(124,58,237,0.3);
+                padding-left: 12px;
+                margin: 0;
+            }
+
+            .av-review-empty {
+                font-size: 0.82rem;
+                color: rgba(148,163,184,0.35);
+                font-style: italic;
+            }
+
+            /* Botao editar no card */
+            .av-card-footer {
+                padding: 0 20px 16px;
+            }
+
+            .av-btn-edit {
+                width: 100%;
+                background: rgba(124,58,237,0.1);
+                border: 1px solid rgba(124,58,237,0.2);
+                color: #a78bfa;
+                border-radius: 8px;
+                padding: 8px;
+                font-size: 0.85rem;
+                font-weight: 600;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 6px;
+            }
+
+            .av-btn-edit:hover {
+                background: rgba(124,58,237,0.2);
+                border-color: rgba(124,58,237,0.4);
+                color: #c4b5fd;
+            }
+
+            /* Estado vazio */
+            .av-empty {
+                text-align: center;
+                padding: 80px 24px;
+                color: rgba(148,163,184,0.5);
+                background: #16162a;
+                border: 1px dashed rgba(139,92,246,0.2);
+                border-radius: 14px;
+            }
+
+            .av-empty i {
+                font-size: 3rem;
+                color: rgba(124,58,237,0.25);
+                display: block;
+                margin-bottom: 16px;
+            }
+
+            .av-empty p {
+                margin: 0 0 20px;
+                font-size: 0.95rem;
+            }
+
+            /* Titulo da secao */
+            .av-section-title {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #e2e8f0;
+                margin: 0 0 24px 0;
+                display: flex;
+                align-items: center;
+                gap: 10px;
+            }
+
+            .av-section-title i { color: #7c3aed; }
+
+            .av-section-title::after {
+                content: '';
+                flex: 1;
+                height: 1px;
+                background: rgba(139,92,246,0.2);
+            }
+
+            /* Dialog de edicao */
+            .av-dialog-stars {
+                display: flex;
+                gap: 4px;
+                margin-bottom: 4px;
+            }
+
+            .av-dialog-stars i {
+                font-size: 1.4rem;
+                cursor: pointer;
+                transition: color 0.15s;
+            }
+
+            .av-horas-info {
+                font-size: 0.82rem;
+                color: rgba(148,163,184,0.55);
+                margin-top: 2px;
+            }
+        </style>
+    </ui:define>
+
+    <ui:define name="content">
+
+        <h:form id="frmAv">
+            <p:growl id="growlAv" showDetail="true"/>
+
+            <div class="av-section-title">
+                <i class="pi pi-star"/>
+                Minhas Avaliacoes
+            </div>
+
+            <!-- Estado vazio -->
+            <h:panelGroup rendered="#{empty avaliacaoController.avaliacoesList}">
+                <div class="av-empty">
+                    <i class="pi pi-star"/>
+                    <p>Nenhum jogo concluido ainda.</p>
+                    <p style="font-size:0.82rem">Conclua jogos no Backlog para avalia-los aqui.</p>
+                    <h:link outcome="/admin/backlog" styleClass="gl-btn gl-btn-primary"
+                            style="display:inline-flex;align-items:center;gap:8px;padding:10px 22px;border-radius:10px;background:linear-gradient(135deg,#7c3aed,#2563eb);color:#fff;font-weight:600;text-decoration:none">
+                        <i class="pi pi-list"/> Ir para o Backlog
+                    </h:link>
+                </div>
+            </h:panelGroup>
+
+            <!-- Grid de cards -->
+            <h:panelGroup rendered="#{not empty avaliacaoController.avaliacoesList}">
+                <div class="av-grid">
+                    <ui:repeat value="#{avaliacaoController.avaliacoesList}" var="jogo">
+                        <div class="av-card">
+
+                            <!-- Capa -->
+                            <h:panelGroup rendered="#{not empty jogo.capaUrl}">
+                                <h:graphicImage value="#{jogo.capaUrl}"
+                                                styleClass="av-card-cover"
+                                                alt="#{jogo.tituloJogo}"/>
+                            </h:panelGroup>
+                            <h:panelGroup rendered="#{empty jogo.capaUrl}">
+                                <div class="av-card-cover-placeholder">
+                                    <i class="pi pi-image"/>
+                                </div>
+                            </h:panelGroup>
+
+                            <div class="av-card-body">
+                                <!-- Titulo + badge -->
+                                <div class="av-card-header">
+                                    <p class="av-card-title">#{jogo.tituloJogo}</p>
+                                    <span class="#{avaliacaoController.getStatusClass(jogo.status)}">
+                                        #{jogo.status}
+                                    </span>
+                                </div>
+
+                                <!-- Estrelas + nota -->
+                                <div>
+                                    <div class="av-stars">
+                                        <!-- 5 estrelas visuais mapeadas da nota 1-10 -->
+                                        <ui:repeat value="#{[1,2,3,4,5]}" var="s">
+                                            <i class="pi #{avaliacaoController.getEstrelasPreenchidas(jogo) >= s ? 'pi-star-fill av-star-filled' : 'pi-star av-star-empty'}"/>
+                                        </ui:repeat>
+                                        <h:panelGroup rendered="#{jogo.avaliacao != null}">
+                                            <span class="av-nota-text">#{jogo.avaliacao}/10</span>
+                                        </h:panelGroup>
+                                        <h:panelGroup rendered="#{jogo.avaliacao == null}">
+                                            <span class="av-nota-text">Sem nota</span>
+                                        </h:panelGroup>
+                                    </div>
+                                    <h:panelGroup rendered="#{jogo.horasJogadas != null}">
+                                        <div class="av-horas-info">
+                                            <i class="pi pi-clock" style="font-size:0.75rem"/> #{jogo.horasJogadas}h jogadas
+                                        </div>
+                                    </h:panelGroup>
+                                </div>
+
+                                <!-- Review -->
+                                <h:panelGroup rendered="#{not empty jogo.review}">
+                                    <p class="av-review-text">#{jogo.review}</p>
+                                </h:panelGroup>
+                                <h:panelGroup rendered="#{empty jogo.review}">
+                                    <span class="av-review-empty">Nenhuma review escrita ainda...</span>
+                                </h:panelGroup>
+                            </div>
+
+                            <!-- Botao editar -->
+                            <div class="av-card-footer">
+                                <p:commandButton styleClass="av-btn-edit"
+                                                 icon="pi pi-pencil" value="Editar Avaliacao"
+                                                 update=":dlgEditAv"
+                                                 oncomplete="PF('dlgEditAvWV').show()"
+                                                 action="#{avaliacaoController.setSelected(jogo)}"/>
+                            </div>
+                        </div>
+                    </ui:repeat>
+                </div>
+            </h:panelGroup>
+        </h:form>
+
+        <!-- Dialog: Editar Avaliacao -->
+        <p:dialog id="dlgEditAv" header="Editar Avaliacao" widgetVar="dlgEditAvWV"
+                  width="580" modal="true" showEffect="fade" resizable="false"
+                  dynamic="true">
+            <h:form id="frmEditAv">
+                <p:growl id="growlEditAv" showDetail="true"/>
+
+                <h:panelGrid columns="2" cellpadding="10"
+                             rendered="#{avaliacaoController.selected != null}">
+
+                    <p:outputLabel value="Jogo:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{avaliacaoController.selected.tituloJogo}"
+                                   style="color:#a78bfa;font-weight:700"/>
+
+                    <p:outputLabel value="Status:" style="font-weight:bold"/>
+                    <p:outputLabel value="#{avaliacaoController.selected.status}"/>
+
+                    <p:outputLabel value="Nota (1-10):" for="iptNota"/>
+                    <p:inputNumber id="iptNota"
+                                   value="#{avaliacaoController.selected.avaliacao}"
+                                   minValue="1" maxValue="10" decimalPlaces="0"
+                                   style="width:120px"
+                                   placeholder="1 a 10"/>
+
+                    <p:outputLabel value="Review:" for="iptReview"/>
+                    <p:inputTextarea id="iptReview"
+                                     value="#{avaliacaoController.selected.review}"
+                                     rows="6" cols="35" autoResize="false"
+                                     placeholder="Escreva sua critica, impressoes, pontos positivos e negativos..."/>
+
+                </h:panelGrid>
+
+                <div style="margin-top:16px;display:flex;gap:10px">
+                    <p:commandButton value="Salvar" icon="pi pi-save"
+                                     action="#{avaliacaoController.salvarAvaliacao()}"
+                                     update=":frmAv :frmEditAv:growlEditAv"
+                                     oncomplete="if(!args.validationFailed) PF('dlgEditAvWV').hide()"/>
+                    <p:commandButton value="Cancelar" icon="pi pi-times"
+                                     styleClass="p-button-secondary"
+                                     onclick="PF('dlgEditAvWV').hide()" type="button"/>
+                </div>
+            </h:form>
+        </p:dialog>
+
+    </ui:define>
+</ui:composition>

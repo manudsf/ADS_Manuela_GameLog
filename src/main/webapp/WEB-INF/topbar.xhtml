@@ -1,0 +1,110 @@
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:pa="http://primefaces.org/manhattan">
+
+    <div class="layout-topbar">
+        <a href="#" id="layout-menu-btn" class="menu-btn">
+            <i class="pi pi-bars"/>
+        </a>
+
+        <div class="layout-topbar-menu-wrapper">
+            <ul class="topbar-menu fadeInDown">
+
+                <!--
+                    Item de perfil.
+                    Classe "topbar-avatar-container" é o target do update do Ajax
+                    para re-renderizar o avatar e o nome após salvar perfil.
+                -->
+                <li class="profile-item topbar-avatar-container">
+
+                    <!--
+                        <a> simples (não commandLink) para não submeter form.
+                        onclick chama abrirPerfilPanel() do perfil-panel.xhtml.
+                    -->
+                    <a href="#"
+                       onclick="abrirPerfilPanel(); return false;"
+                       class="topbar-profile-link"
+                       title="Editar perfil">
+
+                        <!-- Avatar -->
+                        <span class="topbar-avatar-wrap">
+                            <!--
+                                <img> nativo para suportar data: URLs (foto em Base64).
+                                Classe "topbar-avatar-src" usada pelo JS para
+                                propagar a foto nova após salvar sem reload.
+                                Classe "topbar-avatar-principal" usada pelo painel
+                                para copiar o src atual no preview ao abrir.
+                            -->
+                            <h:panelGroup rendered="#{loginController.usuarioLogado != null
+                                                       and loginController.usuarioLogado.fotoPerfil != null
+                                                       and not empty loginController.usuarioLogado.fotoPerfil}">
+                                <img src="#{loginController.usuarioLogado.fotoPerfil}"
+                                     class="topbar-avatar-img topbar-avatar-src topbar-avatar-principal"
+                                     alt="Avatar" width="32" height="32"/>
+                            </h:panelGroup>
+
+                            <h:panelGroup rendered="#{loginController.usuarioLogado == null
+                                                       or loginController.usuarioLogado.fotoPerfil == null
+                                                       or empty loginController.usuarioLogado.fotoPerfil}">
+                                <img src="#{resource['manhattan-layout:images/avatar.png']}"
+                                     class="topbar-avatar-img topbar-avatar-src topbar-avatar-principal"
+                                     alt="Avatar" width="32" height="32"/>
+                            </h:panelGroup>
+                        </span>
+
+                        <!-- Nome (apelido ou nome completo) -->
+                        <span class="topbar-item-name profile-name topbar-nome-exibicao">
+                            #{loginController.usuarioLogado != null
+                                ? loginController.usuarioLogado.nomeExibicao
+                                : 'Usuário'}
+                        </span>
+
+                        <!-- Ícone de lápis: aparece no hover -->
+                        <i class="pi pi-pencil topbar-edit-hint"/>
+                    </a>
+
+                    <!-- Sub-menu dropdown -->
+                    <ul class="fadeInDown animated">
+                        <li role="menuitem">
+                            <h:form>
+                                <p:commandLink action="#{loginController.logout()}"
+                                               styleClass="topbar-logout-link">
+                                    <i class="pi pi-fw pi-sign-out"/>
+                                    <span>Sair</span>
+                                </p:commandLink>
+                            </h:form>
+                        </li>
+                    </ul>
+                </li>
+
+            </ul>
+
+            <!-- Botão de avatar mobile (usa mesma classe src para sync) -->
+            <a href="#" class="topbar-menu-btn" onclick="abrirPerfilPanel(); return false;">
+                <h:panelGroup rendered="#{loginController.usuarioLogado != null
+                                           and loginController.usuarioLogado.fotoPerfil != null
+                                           and not empty loginController.usuarioLogado.fotoPerfil}">
+                    <img src="#{loginController.usuarioLogado.fotoPerfil}"
+                         class="topbar-avatar-img topbar-avatar-src"
+                         alt="Avatar" width="32" height="32"/>
+                </h:panelGroup>
+                <h:panelGroup rendered="#{loginController.usuarioLogado == null
+                                           or loginController.usuarioLogado.fotoPerfil == null
+                                           or empty loginController.usuarioLogado.fotoPerfil}">
+                    <img src="#{resource['manhattan-layout:images/avatar.png']}"
+                         class="topbar-avatar-img topbar-avatar-src"
+                         alt="Avatar" width="32" height="32"/>
+                </h:panelGroup>
+            </a>
+
+            <a href="#" class="rightpanel-btn">
+                <i class="topbar-icon pi pi-fw pi-align-right"/>
+            </a>
+        </div>
+    </div>
+
+</ui:composition>
